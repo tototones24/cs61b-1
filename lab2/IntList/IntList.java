@@ -62,15 +62,28 @@ public class IntList {
    **  elements of B.  May modify items of A. Don't use 'new'. */
 
   public static IntList dcatenate(IntList A, IntList B) {
-    //TODO:  fill in method
-    return null;
+      if(A == null){
+          return B;
+      }
+      else{
+          IntList tmp = A;
+          while (tmp.tail != null){
+              tmp = tmp.tail;
+          }
+          tmp.tail = B;
+          return A;
+      }
   }
 
   /** Returns a list consisting of the elements of A followed by the
    ** elements of B.  May NOT modify items of A.  Use 'new'. */
   public static IntList catenate(IntList A, IntList B) {
-    //TODO:  fill in method
-    return null;
+      if (A == null){
+          return B;
+      }
+      else {
+          return new IntList(A.head, catenate(A.tail, B));
+      }
   }
 
 
