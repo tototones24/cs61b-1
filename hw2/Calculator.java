@@ -12,8 +12,22 @@ public class Calculator {
      * @return the sum of x and y
      **/
     public int add(int x, int y) {
-        // YOUR CODE HERE
-        return -1;
+        int result = 0;
+        int carry = 0;
+        for (int i = 0; i < 32; i++){
+            int pos = 1 << i;
+            int val = x ^ y ^ carry;
+            val &= pos;
+            carry = (x & y) | ((x | y) & carry);
+            carry &= pos;
+
+            //move carry over one
+            carry <<= 1;
+
+            result |= val;
+
+        }
+        return result;
     }
 
     /**
@@ -25,8 +39,15 @@ public class Calculator {
      * @return the product of x and y
      **/
     public int multiply(int x, int y) {
-        // YOUR CODE HERE
-        return -1;
+
+        int result = 0;
+        for (int i = 0; i < 32; i++){
+            int pos = 1 << i;
+            if ((y & pos) != 0){
+                result = add(result, x << i);
+            }
+        }
+        return result;
     }
 
     /**
@@ -67,7 +88,7 @@ public class Calculator {
     /**
      * TASK 6: CLEAR AND UNDO
      * undoEquation() removes the most recent equation we saved to our history.
-    **/
+     **/
     public void undoEquation() {
         // YOUR CODE HERE
     }
