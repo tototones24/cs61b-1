@@ -1,6 +1,7 @@
 import list.EquationList;
 
 public class Calculator {
+    EquationList history;
     // YOU MAY WISH TO ADD SOME FIELDS
 
     /**
@@ -60,7 +61,7 @@ public class Calculator {
      * @param result is an integer corresponding to the result of the equation
      **/
     public void saveEquation(String equation, int result) {
-        // YOUR CODE HERE
+        history = new EquationList(equation, result, history);
     }
 
     /**
@@ -71,7 +72,11 @@ public class Calculator {
      * Ex   "1 + 2 = 3"
      **/
     public void printAllHistory() {
-        // YOUR CODE HERE
+        EquationList tmp = history;
+        while (tmp != null) {
+            System.out.println(tmp.equation + " = " + tmp.result);
+            tmp = tmp.next;
+        }
     }
 
     /**
@@ -82,7 +87,12 @@ public class Calculator {
      * Ex   "1 + 2 = 3"
      **/
     public void printHistory(int n) {
-        // YOUR CODE HERE
+        EquationList tmp = history;
+        while (tmp != null & n > 0) {
+            System.out.println(tmp.equation + " = " + tmp.result);
+            tmp = tmp.next;
+            n--;
+        }
     }    
 
     /**
@@ -90,7 +100,9 @@ public class Calculator {
      * undoEquation() removes the most recent equation we saved to our history.
      **/
     public void undoEquation() {
-        // YOUR CODE HERE
+        if (history != null){
+            history = history.next;
+        }
     }
 
     /**
@@ -98,7 +110,7 @@ public class Calculator {
      * clearHistory() removes all entries in our history.
      **/
     public void clearHistory() {
-        // YOUR CODE HERE
+        history = null;
     }
 
     /**
@@ -108,8 +120,13 @@ public class Calculator {
      * @return the sum of all of the results in history
      **/
     public int cumulativeSum() {
-        // YOUR CODE HERE
-        return -1;
+        EquationList tmp = history;
+        int sum = 0;
+        while (tmp != null){
+            sum += tmp.result;
+            tmp = tmp.next;
+        }
+        return sum;
     }
 
     /**
@@ -119,7 +136,12 @@ public class Calculator {
      * @return the product of all of the results in history
      **/
     public int cumulativeProduct() {
-        // YOUR CODE HERE
-        return -1;
+        EquationList tmp = history;
+        int product = 1;
+        while (tmp != null){
+            product *= tmp.result;
+            tmp = tmp.next;
+        }
+        return product;
     }
 }
