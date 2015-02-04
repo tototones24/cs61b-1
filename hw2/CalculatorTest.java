@@ -22,24 +22,71 @@ public class CalculatorTest {
     // TASK 1: WRITE JUNIT TESTS
     // YOUR CODE HERE
     @Test
-        public void testAdd(){
+        public void testAdd1(){
             assertEquals(tester.add(3,4),7);
+        }
+
+    @Test
+        public void testAdd2(){
             assertEquals(tester.add(3,-4),-1);
+        }
+    @Test
+        public void testAdd3(){
             assertEquals(tester.add(3,-3),0);
+        }
+
+
+    @Test
+        public void testAdd4(){
             assertEquals(tester.add(-35,-25),-60);
+        }
+
+
+    @Test
+        public void testAdd5(){
             assertEquals(tester.add(33,0),33);
+        }
+
+
+    @Test
+        public void testAdd6(){
             assertEquals(tester.add(0,-33),-33);
         }
 
     @Test
-        public void testMultiply(){
+        public void testMultiply1(){
             assertEquals(tester.multiply(2,5),10);
+        }
+    @Test
+        public void testMultiply2(){
             assertEquals(tester.multiply(0,-3),0);
+        }
+
+
+    @Test
+        public void testMultiply3(){
             assertEquals(tester.multiply(-41,3),-123);
+        }
+
+
+    @Test
+        public void testMultiply4(){
             assertEquals(tester.multiply(-2,-3),6);
+        }
+
+
+    @Test
+        public void testMultiply5(){
             assertEquals(tester.multiply(-3,0),0);
+        }
+
+
+    @Test
+        public void testMultiply6(){
             assertEquals(tester.multiply(1,1),1);
         }
+
+
 
 
     /* Run the unit tests in this file. */
