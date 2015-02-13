@@ -3,17 +3,14 @@ public class Piece {
     private boolean isKing;
     private boolean hasCaptured;
     private Board board;
-    private int x;
-    private int y;
     private String type;
 
     public Piece(boolean isFire, Board b, int x, int y, String type){
         this.isFire = isFire;
         this.isKing = false;
         this.board = b;
-        this.x = x;
-        this.y = y;
         this.type = type;
+        b.place(this, x, y);
     }
 
     public boolean isFire(){
