@@ -40,9 +40,8 @@ public class Piece {
     }
 
     public void move(int x, int y){
-        board.remove(positionX, positionY);
         board.place(this, x, y);
-        //implement bomb
+        board.remove(positionX, positionY);
         if (Math.abs(positionX - x) == 2 && Math.abs(positionY - y) == 2){
             board.remove((positionX + x) / 2, (positionY + y) / 2);
             if (type == "bomb"){
@@ -57,7 +56,6 @@ public class Piece {
         }
         positionX = x;
         positionY = y;
-        //handle bomb
     }
 
     public boolean hasCaptured(){

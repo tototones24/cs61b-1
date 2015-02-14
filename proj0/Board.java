@@ -147,18 +147,24 @@ public class Board {
 
     public void select(int x, int y){
         Piece p = pieceAt(x,y);
-        if (selectedPiece != null && canSelect(x,y)){
-            selectedPiece.move(x,y);
-            selectedX = x;
-            selectedY = y;
-            madeMove = true;
-        }
+        if (!canSelect(x,y))
+            return;
 
         if (p != null){
             selectedPiece = p;
             selectedX = x;
             selectedY = y;
+            return;
         }
+
+        if (selectedPiece != null){
+            selectedPiece.move(x,y);
+            board[selectedX][selectedY] = null;
+            selectedX = x;
+            selectedY = y;
+            madeMove = true;
+        }
+
     }
 
     public boolean canEndTurn(){
@@ -202,10 +208,10 @@ public class Board {
         StdDrawPlus.setYscale(0, N);
         Board board = new Board(false);
 
-        board.drawBoard();
         /** Monitors for mouse presses. Wherever the mouse is pressed,
           a new piece appears. */
         while(true) {
+            board.drawBoard();
             if (StdDrawPlus.mousePressed()) {
                 int x = (int) StdDrawPlus.mouseX();
                 int y = (int) StdDrawPlus.mouseY();
@@ -217,8 +223,6 @@ public class Board {
                 }
             }
             StdDrawPlus.show(100);
-            board.drawBoard();
-
         }
     }
 }
