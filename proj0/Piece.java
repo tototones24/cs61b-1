@@ -10,7 +10,6 @@ public class Piece {
         this.isKing = false;
         this.board = b;
         this.type = type;
-        b.place(this, x, y);
     }
 
     public boolean isFire(){
@@ -34,6 +33,10 @@ public class Piece {
 
     public boolean isShield(){
         return type.equals("shield");
+    }
+
+    public void move(int x, int y){
+
     }
 
     public boolean hasCaptured(){

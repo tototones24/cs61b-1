@@ -2,8 +2,8 @@ public class Board {
     private Piece[][] board;
     private Piece selectedPiece;
     private boolean madeMove;
-    private int mouseX;
-    private int mouseY;
+    private int selectedX;
+    private int selectedY;
 
     public Board(boolean shouldBeEmpty){
         board = new Piece[8][8];
@@ -33,6 +33,8 @@ public class Board {
                 else                  StdDrawPlus.setPenColor(StdDrawPlus.RED);
                 StdDrawPlus.filledSquare(i + .5, j + .5, .5);
                 StdDrawPlus.setPenColor(StdDrawPlus.WHITE);
+                if (selectedPiece != null && i == selectedX && j == selectedY)
+                    StdDrawPlus.filledSquare(i + .5, j + .5, .5);
 
                 if (board[i][j] != null) {
                     Piece p = board[i][j];
@@ -84,24 +86,25 @@ public class Board {
         if (xf > 7 | xf < 0 | yf > 7 | yf < 0){
             return false;
         }
+        //handle king
         /*this part is wrong because you can capture
 
-        if (board[xf][yf] != null){
-            return false;
-        }
-        if (Math.abs(xi - xf) != 1){
-            return false;
-        }
-        
-        if (board[xi][yi].isKing()){
-            if (Math.abs(yi - yf) != 1){
-                return false;
-            }
-        }
-        else {
-            return yf == (yi + 1);
-        }
-        */
+          if (board[xf][yf] != null){
+          return false;
+          }
+          if (Math.abs(xi - xf) != 1){
+          return false;
+          }
+
+          if (board[xi][yi].isKing()){
+          if (Math.abs(yi - yf) != 1){
+          return false;
+          }
+          }
+          else {
+          return yf == (yi + 1);
+          }
+          */
         return true;
     }
 
@@ -110,16 +113,18 @@ public class Board {
         if (pieceAt(x,y) != null){
             return selectedPiece != null | !madeMove;
         }
-        if (selectedPiece != null & !madeMove & validMove(mouseX, mouseY, x, y)){
+        if (selectedPiece != null && !madeMove && validMove(selectedX, selectedY, x, y)){
             return true;
         }
-        return selectedPiece.hasCaptured() & validMove(mouseX, mouseY, x, y);
+        return selectedPiece.hasCaptured() && validMove(selectedX, selectedY, x, y);
     }
 
     public void select(int x, int y){
         Piece p = pieceAt(x,y);
         if (p != null){
             selectedPiece = p;
+            selectedX = x;
+            selectedY = y;
         }
     }
 
@@ -129,7 +134,7 @@ public class Board {
 
     public void endTurn(){
         selectedPiece = null;
-        madeMove = null;
+        madeMove = false;
     }
 
     public static void main(String[] args){
@@ -140,13 +145,21 @@ public class Board {
 
         /** Monitors for mouse presses. Wherever the mouse is pressed,
           a new piece appears. */
-        board.drawBoard();
         while(true) {
+            board.drawBoard();
             if (StdDrawPlus.mousePressed()) {
-                double x = StdDrawPlus.mouseX();
-                double y = StdDrawPlus.mouseY();
-                select(x,y);
+                int x = (int) StdDrawPlus.mouseX();
+                int y = (int) StdDrawPlus.mouseY();
+                board.select(x,y);
             }            
+            if (selectedPiece == null)
+                continue;
+            if (StdDrawPlus.mousePressed()) {
+                int x2 = (int) StdDrawPlus.mouseX();
+                int y2 = (int) StdDrawPlus.mouseY();
+                selectedPiece.move(x2,y2);
+            }            
+
             StdDrawPlus.show(100);
         }
     }
