@@ -45,6 +45,15 @@ public class Piece {
         //implement bomb
         if (Math.abs(positionX - x) == 2 && Math.abs(positionY - y) == 2){
             board.remove((positionX + x) / 2, (positionY + y) / 2);
+            if (type == "bomb"){
+                for (int i = -1; i < 2; i++){
+                    for (int j = -1; j < 2; j++){
+                        if (board.pieceAt(x+i,y+j).isShield())
+                            continue;
+                        board.remove(x+i,y+j);
+                    }
+                }
+            }
         }
         positionX = x;
         positionY = y;
