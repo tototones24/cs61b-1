@@ -170,6 +170,31 @@ public class Board {
         currentPlayerFire = !currentPlayerFire;
     }
 
+    public String winner(){
+        int numFire = 0;
+        int numWater = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++){
+                Piece p = pieceAt(i,j);
+                if (p == null)
+                    continue;
+                if (p.isFire()){
+                    numFire++;
+                }
+                else {
+                    numWater++;
+                }
+            }
+        }
+        if (numFire > 0 && numWater == 0)
+            return "Fire";
+        if (numWater > 0 && numFire == 0)
+            return "Water";
+        if (numFire == 0 && numWater == 0)
+            return "No one";
+        return null;
+    }
+
     public static void main(String[] args){
         int N = 8;
         StdDrawPlus.setXscale(0, N);
