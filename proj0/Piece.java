@@ -54,6 +54,10 @@ public class Piece {
                 }
             }
         }
+        if (isFire && y == 7)
+            isKing = true;
+        if (!isFire && y == 0)
+            isKing = true;
         positionX = x;
         positionY = y;
     }
