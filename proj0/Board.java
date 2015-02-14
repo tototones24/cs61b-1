@@ -132,7 +132,6 @@ public class Board {
     }
 
     public boolean canSelect(int x, int y){
-        //todo: fix if you can select opponent's piece
         if (pieceAt(x,y) != null){
             if (currentPlayerFire != pieceAt(x,y).isFire()) 
                 return false;
@@ -141,7 +140,9 @@ public class Board {
         if (selectedPiece != null && !madeMove && validMove(selectedX, selectedY, x, y)){
             return true;
         }
-        return selectedPiece.hasCaptured() && validMove(selectedX, selectedY, x, y);
+        if (selectedPiece != null && selectedPiece.hasCaptured() && validMove(selectedX, selectedY, x, y))
+            return true;
+        return false;
     }
 
     public void select(int x, int y){
