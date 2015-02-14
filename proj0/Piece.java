@@ -53,6 +53,7 @@ public class Piece {
                     }
                 }
             }
+            hasCaptured = true;
         }
         if (isFire && y == 7)
             isKing = true;

@@ -113,8 +113,12 @@ public class Board {
 
         //not safe for water
         //non king can't move backwards
-//        if (!pieceAt(xi,yi).isKing() && yf < yi)
- //           return false;
+        if (!pieceAt(xi,yi).isKing()){
+            if (pieceAt(xi,yi).isFire() && yf < yi)
+                return false;
+            if (!pieceAt(xi,yi).isFire() && yf > yi)
+                return false;
+        }
 
         //non capture is safe
         if (Math.abs(xi - xf) == 1 && Math.abs(yi - yf) == 1)
@@ -140,7 +144,7 @@ public class Board {
         if (selectedPiece != null && !madeMove && validMove(selectedX, selectedY, x, y)){
             return true;
         }
-        if (selectedPiece != null && selectedPiece.hasCaptured() && validMove(selectedX, selectedY, x, y))
+        if (selectedPiece != null && madeMove && selectedPiece.hasCaptured() && validMove(selectedX, selectedY, x, y))
             return true;
         return false;
     }
