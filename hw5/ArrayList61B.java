@@ -4,6 +4,8 @@ public class ArrayList61B<T> extends AbstractList<T>{
     private int numElems;
 
     public ArrayList61B(int initialCapacity){
+        if (initialCapacity <= 0)
+            throw new IllegalArgumentException();
         array =  (T[]) new Object[initialCapacity];
         numElems = 0;
     }
