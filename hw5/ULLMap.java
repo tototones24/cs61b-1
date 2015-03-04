@@ -1,4 +1,5 @@
 import java.util.Set; /* java.util.Set needed only for challenge problem. */
+import java.util.Iterator;
 
 /** A data structure that uses a linked list to store pairs of keys and values.
  *  Any key must appear at most once in the dictionary, but values may appear multiple
@@ -8,39 +9,89 @@ import java.util.Set; /* java.util.Set needed only for challenge problem. */
  *  For simplicity, you may assume that nobody ever inserts a null key or value
  *  into your map.
  */ 
-public class ULLMap { //FIX ME
+public class ULLMap<K,V> implements Map61B<K,V>, Iterable<K> { 
     /** Keys and values are stored in a linked list of Entry objects.
       * This variable stores the first pair in this linked list. You may
       * point this at a sentinel node, or use it as a the actual front item
       * of the linked list. 
       */
     private Entry front;
+    private int size;
 
-    @Override
-    public get(key) { //FIX ME
-    //FILL ME IN
-        return null; //FIX ME
+    public ULLMap(){
+        front = null;
+        size = 0;
     }
 
     @Override
-    public void put(key, val) { //FIX ME
-    //FILL ME IN
+    public V get(K key) {
+        Entry e = front.get(key);
+        if (e == null)
+            return null;
+        return e.val;
     }
 
     @Override
-    public boolean containsKey(key) { //FIX ME
-    //FILL ME IN
-        return false; //FIX ME
+    public void put(K key, V val) {
+        if (front != null){
+            Entry e = front.get(key);
+            if (e != null){
+                e.val = val;
+                return;
+            }
+        }
+        front = new Entry(key, val, front);
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        return front.get(key) != null;
     }
 
     @Override
     public int size() {
-        return 0; // FIX ME (you can add extra instance variables if you want)
+        return size;
     }
 
     @Override
     public void clear() {
-    //FILL ME IN
+        front = null;
+    }
+
+    @Override
+    public Iterator<K> iterator(){
+        return (Iterator<K>) new ULLMapIter(front);
+    }
+
+    public static <K,V> ULLMap<V,K> invert(ULLMap<K,V> map){
+        ULLMap<V,K> invertedMap = new ULLMap<V,K>();
+        for (K key : map)
+            invertedMap.put(map.get(key), key);
+        return invertedMap;
+    }
+
+    private class ULLMapIter implements Iterator<K> {
+        private Entry start;
+        public ULLMapIter(Entry e){
+            this.start = e;
+        }
+
+        @Override
+        public boolean hasNext(){
+            return start != null;
+        }
+
+        @Override
+        public K next(){
+            Entry e = start;
+            start = start.next;
+            return e.key;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
 
@@ -50,7 +101,7 @@ public class ULLMap { //FIX ME
     
         /** Stores KEY as the key in this key-value pair, VAL as the value, and
          *  NEXT as the next node in the linked list. */
-        public Entry(k, v, Entry n) { //FIX ME
+        public Entry(K k, V v, Entry n) {
             key = k;
             val = v;
             next = n;
@@ -58,15 +109,22 @@ public class ULLMap { //FIX ME
 
         /** Returns the Entry in this linked list of key-value pairs whose key
          *  is equal to KEY, or null if no such Entry exists. */
-        public Entry get(k) { //FIX ME
-            //FILL ME IN (using equals, not ==)
-            return null; //FIX ME
+        public Entry get(K k) {
+            if (key.equals(k)){
+                return this;
+            }
+            else{
+                if (next == null)
+                    return null;
+                return next.get(k);
+                
+            }
         }
 
         /** Stores the key of the key-value pair of this node in the list. */
-        private key; //FIX ME
+        private K key;
         /** Stores the value of the key-value pair of this node in the list. */
-        private val; //FIX ME
+        private V val;
         /** Stores the next Entry in the linked list. */
         private Entry next;
     
@@ -75,17 +133,17 @@ public class ULLMap { //FIX ME
     /* Methods below are all challenge problems. Will not be graded in any way. 
      * Autograder will not test these. */
     @Override
-    public remove(key) { //FIX ME SO I COMPILE
+    public V remove(K key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public remove(key, value) { //FIX ME SO I COMPILE
+    public V remove(K key, V value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Set<> keySet() { //FIX ME SO I COMPILE
+    public Set<K> keySet() {
         throw new UnsupportedOperationException();
     }
 
