@@ -4,12 +4,13 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.TreeMap;
+import java.util.HashMap;
 
 public class YearlyRecord {
     /** Creates a new empty YearlyRecord. */
-    TreeSet<String, Integer> data;
+    TreeMap<String, Integer> data;
     public YearlyRecord(){
-        data = new TreeSet<String, Integer>();
+        data = new TreeMap<String, Integer>();
     }
 
     /** Creates a YearlyRecord using the given data. */
@@ -24,7 +25,7 @@ public class YearlyRecord {
 
     /** Records that WORD occurred COUNT times in this year. */
     public void put(String word, int count){
-        return data.put(word, count);
+        data.put(word, count);
     }
 
     /** Returns the number of words recorded this year. */
@@ -39,7 +40,7 @@ public class YearlyRecord {
 
     /** Returns all counts in ascending order of count. */
     public Collection<Number> counts() {
-        return data.values();
+        return (Collection<Number>) (Collection<? extends Number>) data.values();
     }
 
     /** Returns rank of WORD. Most common word is rank 1. 

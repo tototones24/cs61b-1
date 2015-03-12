@@ -1,3 +1,12 @@
+package ngordnet;
+import edu.princeton.cs.introcs.In;
+import java.util.Set;
+import java.util.Iterator;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.TreeMap;
+
 public class NGramMap {
     private TreeMap<String, TimeSeries<Integer>> wordFrequency;
     private TimeSeries<Long> totalWords;
@@ -5,11 +14,11 @@ public class NGramMap {
     public NGramMap(String wordsFilename, String countsFilename){
         In words = new In(wordsFilename);
         In counts = new In(countsFilename);
-        wordFrequency = new TreeMap<String, YearlyRecord>();
-        totalWords = new TimeSeries<Integer>();
+        wordFrequency = new TreeMap<String, TimeSeries<Integer>>();
+        totalWords = new TimeSeries<Long>();
         while (words.hasNextLine()){
             String[] line = words.readLine().split("\t");
-            if (wordFrequency.containsKey(line[0]){
+            if (wordFrequency.containsKey(line[0])){
                 wordFrequency.get(line[0]).put(Integer.parseInt(line[1]), Integer.parseInt(line[2]));
             }
             else {
@@ -21,7 +30,7 @@ public class NGramMap {
 
         while (counts.hasNextLine()){
             String[] line = words.readLine().split(",");
-            counts.put(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+            totalWords.put(Integer.parseInt(line[0]), Long.parseLong(line[1]));
         }
     }
 
@@ -29,7 +38,7 @@ public class NGramMap {
       * did not appear in the given year, return 0. */
     public int countInYear(String word, int year){
         //word might not be there?
-        TimeSeries t = wordFrequency.get(word);
+        TimeSeries<Integer> t = wordFrequency.get(word);
         if (t.containsKey(year))
             return t.get(year);
         return 0;
@@ -39,7 +48,7 @@ public class NGramMap {
     public YearlyRecord getRecord(int year){
         YearlyRecord yr = new YearlyRecord();
         for (String str : wordFrequency.keySet()){
-            yr.put(word, countInYear(str, year));
+            yr.put(str, countInYear(str, year));
         }
 
         return yr;
@@ -62,8 +71,8 @@ public class NGramMap {
 
     /** Provides the relative frequency of WORD between STARTYEAR and ENDYEAR. */
     public TimeSeries<Double> weightHistory(String word, int startYear, int endYear){
-        TimeSeries t1 = new TreeMap(wordFrequency.get(word), startYear, endYear);
-        TimeSeries t2 = new TreeMap(totalWords, startYear, endYear);
+        TimeSeries t1 = new TimeSeries(wordFrequency.get(word), startYear, endYear);
+        TimeSeries t2 = new TimeSeries(totalWords, startYear, endYear);
         return t1.dividedBy(t2);
     }
 
