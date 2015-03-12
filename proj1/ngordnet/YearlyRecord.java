@@ -50,6 +50,5 @@ public class YearlyRecord {
     public int rank(String word){
         //todo
         return 0;
-
     }
 } 

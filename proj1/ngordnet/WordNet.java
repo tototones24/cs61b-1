@@ -42,8 +42,6 @@ public class WordNet {
         }
         synset.close();
         hyponym.close();
-        //for (String[] s: words)
-         //   System.out.println(s);
     }
 
     public Set<String> hyponyms(String word){
@@ -75,5 +73,4 @@ public class WordNet {
         WordNet w = new WordNet("./wordnet/synsets11.txt", "./wordnet/hyponyms11.txt");
         System.out.print(w.hyponyms("animal"));
     }
-
 }
