@@ -51,6 +51,7 @@ public class Plotter {
     /** Returns the numbers from max to 1, inclusive in decreasing order. 
       * Private, so you don't have to implement if you don't want to. */
     private static Collection<Number> downRange(int max){
+        return null;
     }
 
     /** Plots the count (or weight) of every word against the rank of every word on a
