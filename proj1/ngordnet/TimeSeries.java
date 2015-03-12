@@ -46,7 +46,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
         TimeSeries newSeries = new TimeSeries();
         for (Integer i: this.keySet()){
             if (!ts.containsKey(i)){
-                throw new IllegalArgumentException();
+                newSeries.put(i, get(i).doubleValue());
             }
             newSeries.put(i, get(i).doubleValue() + ts.get(i).doubleValue());
         }

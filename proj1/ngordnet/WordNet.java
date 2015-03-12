@@ -9,18 +9,21 @@ import java.util.TreeMap;
 
 public class WordNet {
     private TreeMap<String, Integer> wordMapping;
-    private ArrayList<String> words;
+    private ArrayList<String[]> words;
     private Digraph graph;
     public WordNet(String synsetFilename, String hyponymFilename){
         wordMapping = new TreeMap<String, Integer>();
-        words = new ArrayList<String>();
+        words = new ArrayList<String[]>();
         In synset = new In(synsetFilename);
         In hyponym = new In(hyponymFilename);
         int i = 0;
         while (synset.hasNextLine()){
             String[] line = synset.readLine().split(",");
-            wordMapping.put(line[1], i);
-            words.add(line[1]);
+            String[] synWords = line[1].split(" ");
+            for (String str : synWords){
+                wordMapping.put(str, i);
+            }
+            words.add(synWords);
             i++;
         }
         graph = new Digraph(words.size());
@@ -45,7 +48,8 @@ public class WordNet {
 
         Set<Integer> verticies = GraphHelper.descendants(graph, vertex);
         for (Integer i : verticies){
-            relatedWords.add(words.get(i));
+            for (String str : words.get(i))
+                relatedWords.add(str);
         }
         return relatedWords;
     }
