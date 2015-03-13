@@ -56,8 +56,6 @@ public class WordNet {
             for (String str : words.get(i))
                 relatedWords.add(str);
         }
-        System.out.print(wordMapping);
-        System.out.print(graph);
         return relatedWords;
     }
 
@@ -67,10 +65,5 @@ public class WordNet {
 
     public Set<String> nouns(){
         return wordMapping.keySet();
-    }
-
-    public static void main(String[] args){
-        WordNet w = new WordNet("./wordnet/synsets11.txt", "./wordnet/hyponyms11.txt");
-        System.out.print(w.hyponyms("animal"));
     }
 }
