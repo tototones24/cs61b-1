@@ -50,7 +50,7 @@ public class YearlyRecord {
         }
 
         /* Sort words by order of number of Zs */
-        Arrays.sort(words, new RankComparator());
+        Arrays.sort(words, new ReverseRankComparator());
         ArrayList result = new ArrayList(words.length);
         for (String w : words) {
             result.add(w);
@@ -93,6 +93,11 @@ public class YearlyRecord {
     private class RankComparator implements Comparator<String> {
         public int compare(String x, String y) {
             return countMap.get(y) - countMap.get(x);
+        }
+    }
+    private class ReverseRankComparator implements Comparator<String> {
+        public int compare(String x, String y) {
+            return countMap.get(x) - countMap.get(y);
         }
     }
 
