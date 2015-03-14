@@ -23,13 +23,11 @@ public class YearlyRecord {
 
     public YearlyRecord() {
         countMap = new TreeMap<String, Integer>();
-        rankMap = new TreeMap<String, Integer>();
     }
 
     /** Creates a YearlyRecord using the given data. */
     public YearlyRecord(HashMap<String, Integer> otherCountMap) {
         countMap = new TreeMap(otherCountMap);
-        rankMap = new TreeMap<String, Integer>();
     }
 
     /** Returns the number of times WORD appeared in this year. */
@@ -43,7 +41,7 @@ public class YearlyRecord {
 
     /** Returns all words in ascending order of count. */
     public Collection<String> words() {
-        return (SortedSet<String>) countMap.keySet();
+        return countMap.keySet();
     }
 
     /** Returns all counts in ascending order of count. */

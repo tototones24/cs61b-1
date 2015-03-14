@@ -18,9 +18,13 @@ public class NgordnetUI {
         String synsetFile = in.readString();
         String hyponymFile = in.readString();
         System.out.println("\nBased on ngordnetui.config, using the following: "
-                           + wordFile + ", " + countFile + ", " + synsetFile +
-                           ", and " + hyponymFile + ".");
+                + wordFile + ", " + countFile + ", " + synsetFile +
+                ", and " + hyponymFile + ".");
 
+        NGramMap map = new NGramMap(wordFile, countFile);
+        WordNet wMap = new WordNet(synsetFile, hyponymFile);
+        int startDate = 0;
+        int endDate = Integer.MAX_VALUE;
         while (true) {
             System.out.print("> ");
             String line = StdIn.readLine();
@@ -32,18 +36,39 @@ public class NgordnetUI {
                 case "quit": 
                     return;
                 case "help":
-                    In in = new In("help.txt");
-                    String helpStr = in.readAll();
-                    System.out.println(helpStr);
+                    System.out.println((new In("./ngordnet/help.txt")).readAll());
                     break;  
                 case "range": 
-                    int startDate = Integer.parseInt(tokens[0]); 
-                    int endDate = Integer.parseInt(tokens[1]);
+                    startDate = Integer.parseInt(tokens[0]); 
+                    endDate = Integer.parseInt(tokens[1]);
                     System.out.println("Start date: " + startDate);
                     System.out.println("End date: " + endDate);
                     break;
                 case "count":
-                    break
+                    if (tokens.length != 2) {
+                        continue;
+                    }
+                    System.out.println(map.countInYear(tokens[0], Integer.parseInt(tokens[1])));
+                    break;
+                case "hyponyms":
+                    if (tokens.length != 1) {
+                        continue;
+                    }
+                    System.out.println(wMap.hyponyms(tokens[0]));
+                    break;
+                case "history":
+                    Plotter.plotAllWords(map, tokens, startDate, endDate);
+                    break;
+                case "hypohist":
+                    Plotter.plotAllWords(map, tokens, startDate, endDate);
+                    break;
+                case "wordlength":
+                    WordLengthProcessor w = new WordLengthProcessor();
+                    Plotter.plotProcessedHistory(map, startDate, endDate, w);
+                    break;
+                case "zipf":
+                    Plotter.plotZipfsLaw(map, Integer.parseInt(tokens[0]));
+                    break;
                 default:
                     System.out.println("Invalid command.");  
                     break;
