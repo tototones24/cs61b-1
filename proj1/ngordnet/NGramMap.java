@@ -14,8 +14,9 @@ public class NGramMap {
         totalWords = new TimeSeries<Long>();
         while (words.hasNextLine()) {
             String[] line = words.readLine().split("\t");
-            if (wordFrequency.containsKey(line[0])){
-                wordFrequency.get(line[0]).put(Integer.parseInt(line[1]), Integer.parseInt(line[2]));
+            if (wordFrequency.containsKey(line[0])) {
+                wordFrequency.get(line[0]).put(Integer.parseInt(line[1]), 
+                        Integer.parseInt(line[2]));
             }
             else {
                 TimeSeries t =  new TimeSeries<Integer>();
@@ -31,7 +32,7 @@ public class NGramMap {
     }
 
     /** Returns the absolute count of WORD in the given YEAR. If the word
-      * did not appear in the given year, return 0. */
+     * did not appear in the given year, return 0. */
     public int countInYear(String word, int year) {
         //word might not be there?
         TimeSeries<Integer> t = wordFrequency.get(word);
@@ -82,10 +83,10 @@ public class NGramMap {
     }
 
     /** Provides the summed relative frequency of all WORDS between
-      * STARTYEAR and ENDYEAR. If a word does not exist, ignore it rather
-      * than throwing an exception. */
+     * STARTYEAR and ENDYEAR. If a word does not exist, ignore it rather
+     * than throwing an exception. */
     public TimeSeries<Double> summedWeightHistory(Collection<String> words, int startYear, 
-                int endYear) {
+            int endYear) {
         TimeSeries<Double> total = new TimeSeries();
         for (String str : words) {
             total = total.plus(weightHistory(str, startYear, endYear));
@@ -103,7 +104,7 @@ public class NGramMap {
     }
 
     /** Provides processed history of all words between STARTYEAR and ENDYEAR as processed
-      * by YRP. */
+     * by YRP. */
     public TimeSeries<Double> processedHistory(int startYear, int endYear, 
             YearlyRecordProcessor yrp) {
         TimeSeries<Double> result = new TimeSeries<Double>();

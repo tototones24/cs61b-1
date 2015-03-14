@@ -4,7 +4,7 @@ import java.util.TreeMap;
 
 public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {    
     /** Constructs a new empty TimeSeries. */
-    public TimeSeries(){
+    public TimeSeries() {
     }
 
 
@@ -14,6 +14,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
         if (ts == null) {
             return;
         }
+
         else {
             for (Integer i: ts.keySet()) {
                 if (i >= startYear && i <= endYear) {
@@ -52,6 +53,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
             if (!ts.containsKey(i)) {
                 newSeries.put(i, get(i).doubleValue());
             }
+
             else {
                 newSeries.put(i, get(i).doubleValue() + ts.get(i).doubleValue());
             }

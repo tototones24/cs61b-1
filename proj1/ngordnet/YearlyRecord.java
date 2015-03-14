@@ -58,8 +58,10 @@ public class YearlyRecord {
     /** Records that WORD occurred COUNT times in this year. */
     public void put(String word, int count) {
         /* Will not pass muster for that 0.1 bonus points. */
-        countMap.put(word, count);
-        needsUpdating = true;
+        if (count > 0) {
+            countMap.put(word, count);
+            needsUpdating = true;
+        }
 
     }
 

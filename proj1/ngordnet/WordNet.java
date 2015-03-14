@@ -21,7 +21,7 @@ public class WordNet {
             String[] synWords = line[1].split(" ");
             for (String str : synWords) {
                 TreeSet<Integer> t = wordMapping.get(str);
-                if (t == null){
+                if (t == null) {
                     t = new TreeSet<Integer>();
                 }
 
