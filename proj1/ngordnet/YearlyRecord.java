@@ -41,7 +41,10 @@ public class YearlyRecord {
 
     /** Returns all words in ascending order of count. */
     public Collection<String> words() {
-        return countMap.keySet();
+        if (needsUpdating) {
+            updateRank();
+        }
+        return (SortedSet<String>) rankMap.keySet();
     }
 
     /** Returns all counts in ascending order of count. */
@@ -69,7 +72,6 @@ public class YearlyRecord {
 
         if (needsUpdating) {
             updateRank();
-            needsUpdating = false;
         }
         return rankMap.get(x);
     }
@@ -107,6 +109,7 @@ public class YearlyRecord {
         for (int i = 0; i < words.length; i += 1) {
             rankMap.put(words[i], i + 1);
         }
+        needsUpdating = false;
 
     }
 } 

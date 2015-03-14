@@ -20,7 +20,7 @@ public class Plotter {
         Collection counts = ts.data();
 
         // Create Chart
-        Chart chart = QuickChart.getChart(title, ylabel, xlabel, legend, years, counts);
+        Chart chart = QuickChart.getChart(title, xlabel, ylabel, legend, years, counts);
      
         // Show it
         new SwingWrapper(chart).displayChart();        

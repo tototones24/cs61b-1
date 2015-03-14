@@ -39,10 +39,11 @@ public class NgordnetUI {
                     System.out.println((new In("./ngordnet/help.txt")).readAll());
                     break;  
                 case "range": 
+                    if (tokens.length != 2) {
+                        continue;
+                    }
                     startDate = Integer.parseInt(tokens[0]); 
                     endDate = Integer.parseInt(tokens[1]);
-                    System.out.println("Start date: " + startDate);
-                    System.out.println("End date: " + endDate);
                     break;
                 case "count":
                     if (tokens.length != 2) {
@@ -60,13 +61,16 @@ public class NgordnetUI {
                     Plotter.plotAllWords(map, tokens, startDate, endDate);
                     break;
                 case "hypohist":
-                    Plotter.plotAllWords(map, tokens, startDate, endDate);
+                    Plotter.plotCategoryWeights(map, wMap, tokens, startDate, endDate);
                     break;
                 case "wordlength":
                     WordLengthProcessor w = new WordLengthProcessor();
                     Plotter.plotProcessedHistory(map, startDate, endDate, w);
                     break;
                 case "zipf":
+                    if (tokens.length != 1) {
+                        continue;
+                    }
                     Plotter.plotZipfsLaw(map, Integer.parseInt(tokens[0]));
                     break;
                 default:

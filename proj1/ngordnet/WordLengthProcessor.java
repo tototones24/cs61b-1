@@ -4,11 +4,11 @@ class WordLengthProcessor implements YearlyRecordProcessor {
     public double process(YearlyRecord yr){
         long wordLengthSum = 0;
         for (String s : yr.words()){
-            wordLengthSum += s.length();
+            wordLengthSum += s.length() * yr.count(s);
         }
         if (yr.size() == 0) {
             return 0;
         }
-        return (double) wordLengthSum / (double) yr.size();
+        return wordLengthSum / ((double) yr.size());
     }
 }

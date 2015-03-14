@@ -4,16 +4,21 @@ import java.util.TreeMap;
 
 public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {    
     /** Constructs a new empty TimeSeries. */
-    public TimeSeries() {
+    public TimeSeries(){
     }
 
 
     /** Creates a copy of TS, but only between STARTYEAR and ENDYEAR. 
      * inclusive of both end points. */
     public TimeSeries(TimeSeries<T> ts, int startYear, int endYear) {
-        for (Integer i: ts.keySet()) {
-            if (i >= startYear && i <= endYear) {
-                put(i, ts.get(i));
+        if (ts == null) {
+            TimeSeries();
+        }
+        else {
+            for (Integer i: ts.keySet()) {
+                if (i >= startYear && i <= endYear) {
+                    put(i, ts.get(i));
+                }
             }
         }
     }
@@ -42,6 +47,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
      * a Double time series (for simplicity). */
     public TimeSeries<Double> plus(TimeSeries<? extends Number> ts) {
         TimeSeries<Double> newSeries = new TimeSeries<Double>();
+
         for (Integer i: this.keySet()) {
             if (!ts.containsKey(i)) {
                 newSeries.put(i, get(i).doubleValue());
@@ -50,6 +56,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
                 newSeries.put(i, get(i).doubleValue() + ts.get(i).doubleValue());
             }
         }
+
         for (Integer i: ts.keySet()) {
             if (!containsKey(i)) {
                 newSeries.put(i, ts.get(i).doubleValue());
