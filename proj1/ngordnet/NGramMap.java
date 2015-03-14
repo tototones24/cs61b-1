@@ -17,8 +17,7 @@ public class NGramMap {
             if (wordFrequency.containsKey(line[0])) {
                 wordFrequency.get(line[0]).put(Integer.parseInt(line[1]), 
                         Integer.parseInt(line[2]));
-            }
-            else {
+            } else {
                 TimeSeries t =  new TimeSeries<Integer>();
                 t.put(Integer.parseInt(line[1]), Integer.parseInt(line[2]));
                 wordFrequency.put(line[0], t);

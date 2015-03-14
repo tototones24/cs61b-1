@@ -13,9 +13,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
     public TimeSeries(TimeSeries<T> ts, int startYear, int endYear) {
         if (ts == null) {
             return;
-        }
-
-        else {
+        } else {
             for (Integer i: ts.keySet()) {
                 if (i >= startYear && i <= endYear) {
                     put(i, ts.get(i));
@@ -52,9 +50,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
         for (Integer i: this.keySet()) {
             if (!ts.containsKey(i)) {
                 newSeries.put(i, get(i).doubleValue());
-            }
-
-            else {
+            } else {
                 newSeries.put(i, get(i).doubleValue() + ts.get(i).doubleValue());
             }
         }
