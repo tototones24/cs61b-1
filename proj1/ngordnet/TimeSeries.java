@@ -12,7 +12,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
      * inclusive of both end points. */
     public TimeSeries(TimeSeries<T> ts, int startYear, int endYear) {
         if (ts == null) {
-            TimeSeries<T>();
+            return;
         }
         else {
             for (Integer i: ts.keySet()) {
