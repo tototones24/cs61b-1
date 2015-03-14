@@ -51,7 +51,11 @@ public class YearlyRecord {
 
     /** Returns all counts in ascending order of count. */
     public Collection<Number> counts() {
-        return (Collection<Number>) (Collection<? extends Number>) countMap.values();
+        Set<Number> s = new Set();
+        s.addAll(countMap.values());
+        return s;
+
+        //return (Collection<Number>) (Collection<? extends Number>) countMap.values();
     }
 
     /** Records that WORD occurred COUNT times in this year. */
@@ -70,7 +74,7 @@ public class YearlyRecord {
         }
 
         if (needsUpdating) {
-            updateFewerZsCount();
+            updateRank();
             needsUpdating = false;
         }
         return rankMap.get(x);
@@ -84,7 +88,7 @@ public class YearlyRecord {
     }
 
     /** Update sthe fewerZsCount map using sorting. */
-    private void updateFewerZsCount() {
+    private void updateRank() {
         rankMap = new TreeMap<String, Integer>();
         /** The slow approach:
          * For every key, compare against all other keys, and count zs.
