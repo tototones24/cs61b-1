@@ -3,14 +3,10 @@
  *  @author Josh Hug
  */
 package ngordnet;
-import java.util.Set;
 import java.util.Collection;
-import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.HashMap;
-
-import java.util.TreeMap;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -24,13 +20,13 @@ public class YearlyRecord {
     private boolean needsUpdating = true;
 
 
-    public YearlyRecord(){
+    public YearlyRecord() {
         countMap = new TreeMap<String, Integer>();
         rankMap = new TreeMap<String, Integer>();
     }
 
     /** Creates a YearlyRecord using the given data. */
-    public YearlyRecord(HashMap<String, Integer> otherCountMap){
+    public YearlyRecord(HashMap<String, Integer> otherCountMap) {
         countMap = new TreeMap(otherCountMap);
         rankMap = new TreeMap<String, Integer>();
     }
@@ -40,22 +36,21 @@ public class YearlyRecord {
         return countMap.get(word);
     }
 
-    public int size(){
+    public int size() {
         return countMap.size();
     }
 
     /** Returns all words in ascending order of count. */
     public Collection<String> words() {
-        return countMap.keySet();
+        return (SortedSet<String>) countMap.keySet();
     }
 
     /** Returns all counts in ascending order of count. */
     public Collection<Number> counts() {
-        Set<Number> s = new Set();
+        TreeSet<Number> s = new TreeSet();
         s.addAll(countMap.values());
         return s;
 
-        //return (Collection<Number>) (Collection<? extends Number>) countMap.values();
     }
 
     /** Records that WORD occurred COUNT times in this year. */
@@ -81,7 +76,7 @@ public class YearlyRecord {
     }
 
     /** Comparator that compares strings based on zCount. */
-    private class rankComparator implements Comparator<String> {
+    private class RankComparator implements Comparator<String> {
         public int compare(String x, String y) {
             return countMap.get(y) - countMap.get(x);
         }
@@ -106,7 +101,7 @@ public class YearlyRecord {
         }
 
         /* Sort words by order of number of Zs */
-        Arrays.sort(words, new rankComparator());
+        Arrays.sort(words, new RankComparator());
 
         /* This is specific to this weird problem I've made up, not the
          * project. */

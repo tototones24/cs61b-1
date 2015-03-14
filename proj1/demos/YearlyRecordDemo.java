@@ -47,5 +47,8 @@ public class YearlyRecordDemo {
         rawData.put("puppetry", 191);
         YearlyRecord yr2 = new YearlyRecord(rawData);
         System.out.println(yr2.rank("auscultating")); // should print 4
+        System.out.println(yr2.words());
+        System.out.println(yr2.counts());
+
     }
 } 

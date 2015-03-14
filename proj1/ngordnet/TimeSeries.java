@@ -1,38 +1,36 @@
 package ngordnet;
-import java.util.Set;
 import java.util.Collection;
-import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.TreeMap;
 
 public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {    
     /** Constructs a new empty TimeSeries. */
-    public TimeSeries(){
+    public TimeSeries() {
     }
 
 
     /** Creates a copy of TS, but only between STARTYEAR and ENDYEAR. 
      * inclusive of both end points. */
-    public TimeSeries(TimeSeries<T> ts, int startYear, int endYear){
-        for (Integer i: ts.keySet()){
-            if (i >= startYear && i <= endYear)
+    public TimeSeries(TimeSeries<T> ts, int startYear, int endYear) {
+        for (Integer i: ts.keySet()) {
+            if (i >= startYear && i <= endYear) {
                 put(i, ts.get(i));
+            }
         }
     }
 
     /** Creates a copy of TS. */
-    public TimeSeries(TimeSeries<T> ts){
-        for (Integer i: ts.keySet()){
+    public TimeSeries(TimeSeries<T> ts) {
+        for (Integer i: ts.keySet()) {
             put(i, ts.get(i));
         }
     }
 
     /** Returns the quotient of this time series divided by the relevant value in ts.
      * If ts is missing a key in this time series, return an IllegalArgumentException. */
-    public TimeSeries<Double> dividedBy(TimeSeries<? extends Number> ts){
+    public TimeSeries<Double> dividedBy(TimeSeries<? extends Number> ts) {
         TimeSeries newSeries = new TimeSeries();
-        for (Integer i: this.keySet()){
-            if (!ts.containsKey(i)){
+        for (Integer i: this.keySet()) {
+            if (!ts.containsKey(i)) {
                 throw new IllegalArgumentException();
             }
             newSeries.put(i, get(i).doubleValue() / ts.get(i).doubleValue());
@@ -44,16 +42,16 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
      * a Double time series (for simplicity). */
     public TimeSeries<Double> plus(TimeSeries<? extends Number> ts) {
         TimeSeries<Double> newSeries = new TimeSeries<Double>();
-        for (Integer i: this.keySet()){
-            if (!ts.containsKey(i)){
+        for (Integer i: this.keySet()) {
+            if (!ts.containsKey(i)) {
                 newSeries.put(i, get(i).doubleValue());
             }
-            else{
+            else {
                 newSeries.put(i, get(i).doubleValue() + ts.get(i).doubleValue());
             }
         }
-        for (Integer i: ts.keySet()){
-            if (!containsKey(i)){
+        for (Integer i: ts.keySet()) {
+            if (!containsKey(i)) {
                 newSeries.put(i, ts.get(i).doubleValue());
             }
         }
@@ -67,8 +65,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
     }
 
     /** Returns all years for this time series (in any order). */
-    public Collection<Number> years(){
+    public Collection<Number> years() {
         return (Collection<Number>) (Collection<? extends Number>) keySet();
     }
-
 }
