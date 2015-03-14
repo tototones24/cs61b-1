@@ -18,20 +18,21 @@ import java.util.Comparator;
 public class YearlyRecord {
     private TreeMap<String, Integer> countMap = new TreeMap<String, Integer>();
 
-    /** Store the number of keys with fewer Zs than our String. */
-    private TreeMap<String, Integer> fewerZsCount = new TreeMap<String, Integer>();
+    private TreeMap<String, Integer> rankMap = new TreeMap<String, Integer>();
 
     /** Determines whether or not the fewerZsCount map needs updating. */
     private boolean needsUpdating = true;
 
 
     public YearlyRecord(){
-       countMap = new TreeMap<String, Integer>();
+        countMap = new TreeMap<String, Integer>();
+        rankMap = new TreeMap<String, Integer>();
     }
 
     /** Creates a YearlyRecord using the given data. */
     public YearlyRecord(HashMap<String, Integer> otherCountMap){
         countMap = new TreeMap(otherCountMap);
+        rankMap = new TreeMap<String, Integer>();
     }
 
     /** Returns the number of times WORD appeared in this year. */
@@ -62,7 +63,7 @@ public class YearlyRecord {
     }
 
     /** Returns the number of words with fewer Zs than x, where x is some
-      * key in the map. If x is not part of the map, return -1. */
+     * key in the map. If x is not part of the map, return -1. */
     public int rank(String x) {        
         if (!countMap.containsKey(x)) {
             return -1;
@@ -72,24 +73,22 @@ public class YearlyRecord {
             updateFewerZsCount();
             needsUpdating = false;
         }
-        return fewerZsCount.get(x);
+        return rankMap.get(x);
     }
 
     /** Comparator that compares strings based on zCount. */
-    private class ZComparator implements Comparator<String> {
+    private class rankComparator implements Comparator<String> {
         public int compare(String x, String y) {
-            if (countMap.get(x) == countMap.get(y))
-                return x.compareTo(y);
-            return countMap.get(x) - countMap.get(y);
+            return countMap.get(y) - countMap.get(x);
         }
     }
 
     /** Update sthe fewerZsCount map using sorting. */
     private void updateFewerZsCount() {
-        fewerZsCount = new TreeMap<String, Integer>();
+        rankMap = new TreeMap<String, Integer>();
         /** The slow approach:
-          * For every key, compare against all other keys, and count zs.
-          * O(N^2) -- slow compared to sorting. */
+         * For every key, compare against all other keys, and count zs.
+         * O(N^2) -- slow compared to sorting. */
 
         /* Better approach: Sort the items! */
         /* After sorting: we get 'peel', 'zebra', 'zebras', 'zzzzzz'
@@ -103,24 +102,12 @@ public class YearlyRecord {
         }
 
         /* Sort words by order of number of Zs */
-        Arrays.sort(words, new ZComparator());
+        Arrays.sort(words, new rankComparator());
 
         /* This is specific to this weird problem I've made up, not the
          * project. */
-        int lastZCount = 0;
-        fewerZsCount.put(words[0], 0);        
-        for (int i = 1; i < words.length; i += 1) {
-            int currentZCount = countMap.get(words[i]);
-            int numWordsLessZs;
-
-            if (currentZCount > lastZCount) {
-                numWordsLessZs = i;
-            } else {
-                numWordsLessZs = fewerZsCount.get(words[i-1]);
-            }
-            
-            fewerZsCount.put(words[i], numWordsLessZs);
-            lastZCount = currentZCount;
+        for (int i = 0; i < words.length; i += 1) {
+            rankMap.put(words[i], i + 1);
         }
 
     }
