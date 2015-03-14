@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -41,10 +42,20 @@ public class YearlyRecord {
 
     /** Returns all words in ascending order of count. */
     public Collection<String> words() {
-        if (needsUpdating) {
-            updateRank();
+        String[] words = new String[countMap.size()];
+        int cnt = 0;
+        for (String word : countMap.keySet()) {
+            words[cnt] = word;
+            cnt += 1;
         }
-        return (SortedSet<String>) rankMap.keySet();
+
+        /* Sort words by order of number of Zs */
+        Arrays.sort(words, new RankComparator());
+        ArrayList result = new ArrayList(words.length);
+        for (String w : words) {
+            result.add(w);
+        }
+        return result;
     }
 
     /** Returns all counts in ascending order of count. */
