@@ -28,7 +28,7 @@ public class NGramMap {
             }
         }
 
-        while (counts.hasNextLine()){
+        while (words.hasNextLine()){
             String[] line = words.readLine().split(",");
             totalWords.put(Integer.parseInt(line[0]), Long.parseLong(line[1]));
         }

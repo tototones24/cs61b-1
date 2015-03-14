@@ -63,6 +63,8 @@ public class TimeSeriesDemo {
         TimeSeries<Double> tQuotient = ts2.dividedBy(ts3);
 
         System.out.println(tQuotient.get(1991)); // should print 2.0
+        System.out.println(tQuotient.years()); // should print 2.0
+        System.out.println(tQuotient.data()); // should print 2.0
 
         /* The following would cause an IllegalArgumentException since ts2
          * does not include all years from ts, which is tantamount to a
