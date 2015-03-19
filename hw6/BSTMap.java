@@ -1,12 +1,12 @@
 import java.util.Set;
-public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     private int size;
     private K key;
     private V value;
-    private BSTMap<K,V> left;
-    private BSTMap<K,V> right;
+    private BSTMap<K, V> left;
+    private BSTMap<K, V> right;
 
-    public BSTMap(){
+    public BSTMap() {
         size = 0;
         key = null;
         value = null;
@@ -14,70 +14,70 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         right = null;
     }
 
-    public BSTMap(K key, V value){
+    public BSTMap(K k, V v) {
         size = 1;
-        this.key = key;
-        this.value = value;
+        key = k;
+        value = v;
         left = null;
         right = null;
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public V get(K key){
+    public V get(K k){
         if (size == 0) {
             return null;
         }
-        if (key.equals(this.key)){
+        if (k.equals(key)){
             return value;
         }
-        if (key.compareTo(this.key) < 0){
-            return left.get(key);
+        if (k.compareTo(key) < 0){
+            return left.get(k);
         }
-        return right.get(key);
+        return right.get(k);
     }
 
-    public boolean containsKey(K key){
+    public boolean containsKey(K k) {
         if (size == 0) {
             return false;
         }
-        if (key.equals(this.key)){
+        if (k.equals(key)) {
             return true;
         }
-        if (key.compareTo(this.key) < 0){
-            return left.containsKey(key);
+        if (k.compareTo(this.key) < 0) {
+            return left.containsKey(k);
         }
-        return right.containsKey(key);
+        return right.containsKey(k);
     }
 
-    public void put(K key, V value){
+    public void put(K k, V v){
         if (size == 0){
-            this.key = key;
-            this.value = value;
+            key = k;
+            value = v;
             size++;
         }
-        if (key.equals(this.key)){
-            this.value = value;
-        } else if (key.compareTo(this.key) < 0){
+        if (k.equals(key)){
+            value = v;
+        } else if (k.compareTo(key) < 0){
             if (left == null){
-                left = new BSTMap(key, value);
+                left = new BSTMap(k, v);
                 size++;
             } else {
                 int s = left.size();
-                left.put(key, value);
+                left.put(k, v);
                 if (left.size() > s) {
                     size++;
                 }
             }
         } else {
             if (right == null){
-                right = new BSTMap(key, value);
+                right = new BSTMap(k, v);
                 size++;
             } else {
                 int s2 = right.size();
-                right.put(key, value);
+                right.put(k, v);
                 if (right.size() > s2) {
                     size++;
                 }
@@ -85,21 +85,21 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         }
     }
 
-    public void printInOrder(){
-        if (size == 0){
+    public void printInOrder() {
+        if (size == 0) {
             return;
         }
 
-        if (left != null){
+        if (left != null) {
             left.printInOrder();
         }
         System.out.print(key);
-        if (right != null){
+        if (right != null) {
             right.printInOrder();
         }
     }
 
-    public void clear(){
+    public void clear() {
         size = 0;
         key = null;
         value = null;
@@ -107,15 +107,15 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         right = null;
     }
 
-    public V remove(K key){
+    public V remove(K k) {
         return null;
     }
 
-    public V remove(K key, V value){
+    public V remove(K k, V v) {
         return null;
     }
 
-    public Set<K> keySet(){
+    public Set<K> keySet() {
         return null;
     }
 }
