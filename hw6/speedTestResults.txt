@@ -1,0 +1,28 @@
+For insertrandom: 
+What would you like L to be?: 10
+
+Enter # strings to insert into ULLMap: 10000 
+class ULLMap: 0.51 sec
+
+Enter # strings to insert into your BSTMap: 10000
+class BSTMap: 0.03 sec
+
+Enter # strings to insert into Java's TreeMap: 10000
+Java's Built-in TreeMap: 0.02 sec
+
+
+For insertinorder: 
+ This program inserts lexicographically increasing Stringsinto Maps as <String, Integer> pairs.
+
+Enter # strings to insert into ULLMap: 10000
+class ULLMap: 1.14 sec
+
+Enter # strings to insert into BSTMap: 10000
+class BSTMap: 1.06 sec
+
+Enter # strings to insert into Java's TreeMap: 10000
+Java's Built-in TreeMap: 0.02 sec
+
+
+If you insert in order, the BSTMap has to do a linear search to find the
+insertion node so performance degrades to that of ULLMap.

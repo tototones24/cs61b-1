@@ -1,8 +1,9 @@
-1.
-2.
-3.
-4.
-5.
-6.
-7.
-8.
+1. T A random key is equally likely to be less than or greater to any of the other keys so it takes a random path to of the the nodes or leaves, which has expected length log(N).
+2. T same reasoning as above.
+3. F The time taken is not bounded below by Omega(N) so it cannot be Theta(N)
+4. T if it is O(log N), it is also O(N)
+5. T if it is O(log N), it is also O(N^2)
+6. F N random calls to B.put(K, V) would take ~Nlog(N)
+7. T C and K could be anywhere in the tree and on average it would take a path of length O(log(N)) to find each of them.
+8. O(N). Assume numberOfNodes(b.left) is only calculated once due to
+optimization. Then N + N/2 + N/4 + ... ~= N(1/(1- 0.5)) = 2N
