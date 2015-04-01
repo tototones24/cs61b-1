@@ -9,7 +9,7 @@ public class FibonacciMemo {
      * @param n
      * @return The nth fibonacci number
      */
-    private HashMap<Integer, Integer> map;
+    private static HashMap<Integer, Integer> map;
     public static int fibNoMemo(int n) {
         if (n <= 1) {
             return n;
