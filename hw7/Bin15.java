@@ -48,7 +48,7 @@ public class Bin15 {
         int hash = 0;
         int position = 1;
         for (int count = 0; count < 15; count++) {
-            char c = input.charAt(15 - count - 1);
+            char c = myBinStr.charAt(15 - count - 1);
             // Careful with comparing vs 0 and comparing vs '0'
             if (c == '1') {
                 hash += position;
