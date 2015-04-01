@@ -22,7 +22,7 @@ public class Bin15 {
 
         // Check for illegal characters
         for (int count = 0; count < 15; count++) {
-            char c = myBinStr.charAt(count);
+            char c = input.charAt(count);
             // Careful with comparing vs 0 and comparing vs '0'
             if (c != '0' && c != '1') {
                 String msg = "Your binary string contains a non-binary character";
