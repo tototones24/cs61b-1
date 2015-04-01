@@ -12,7 +12,7 @@ public class Username {
         char c1 = (char) (Math.random() * 11);
         char c2 = (char) (97 + (int) (Math.random() * 26));
         char c3 = (char) (97 + (int) (Math.random() * 26));
-        return ("" + c1) + c2 + c3;
+        name = ("" + c1) + c2 + c3;
     }
 
     public Username(String reqName) {
@@ -40,7 +40,7 @@ public class Username {
     @Override
     public boolean equals(Object o) {
         if (o != null && o instanceof Username) {
-            Username u = (username) o;
+            Username u = (Username) o;
             return this.name.equalsIgnoreCase(u.name);
         }
         return false;
