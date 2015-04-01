@@ -9,9 +9,9 @@ public class Username {
     String name;
 
     public Username() {
-        char c1 = (char) (Math.random() * 11)
-        char c2 = (char) (97 + (int) (Math.random() * 26))
-        char c3 = (char) (97 + (int) (Math.random() * 26))
+        char c1 = (char) (Math.random() * 11);
+        char c2 = (char) (97 + (int) (Math.random() * 26));
+        char c3 = (char) (97 + (int) (Math.random() * 26));
         return ("" + c1) + c2 + c3;
     }
 
@@ -51,7 +51,7 @@ public class Username {
     @Override
     public int hashCode() { 
         // YOUR CODE HERE
-        return 0;
+        return ((int) name.charAt(0)) + (name.charAt(1) * 100) + (name.charAt(2) * 10000);
     }
 
     public static void main(String[] args) {
