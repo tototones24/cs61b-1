@@ -45,7 +45,17 @@ public class Bin15 {
     
     @Override
     public int hashCode() {
-        return -1; // YOUR CODE HERE
+        int hash = 0;
+        int position = 1;
+        for (int count = 0; count < 15; count++) {
+            char c = input.charAt(15 - count - 1);
+            // Careful with comparing vs 0 and comparing vs '0'
+            if (c == '1') {
+                hash += position;
+            }
+            position <<= 1;
+        }
+        return hash;
     }
 
     /* DO THIS LAST, AFTER IMPLEMENTING EVERYTHING
@@ -55,7 +65,7 @@ public class Bin15 {
     in the method followUpAnswer(). 
     */
     public static final int followUpAnswer() {
-        return 42; // YOUR CODE HERE. THIS MAY OR MAY NOT BE CORRECT.
+        return 32; // YOUR CODE HERE. THIS MAY OR MAY NOT BE CORRECT.
     }
     
     public static void main(String[] args) {

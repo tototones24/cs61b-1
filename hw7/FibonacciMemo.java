@@ -42,7 +42,7 @@ public class FibonacciMemo {
      * as the 47th Fibonacci number?
      */
     public static String why47() {
-        return "fibMemo(47) does not fit into the range of int";
+        return "fibMemo(47) overflows int";
     }
 
     public static void main(String[] args) {
