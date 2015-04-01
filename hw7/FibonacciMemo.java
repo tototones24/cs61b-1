@@ -9,6 +9,7 @@ public class FibonacciMemo {
      * @param n
      * @return The nth fibonacci number
      */
+    private HashMap<Integer, Integer> map;
     public static int fibNoMemo(int n) {
         if (n <= 1) {
             return n;
@@ -24,8 +25,15 @@ public class FibonacciMemo {
      * @return The nth fibonacci number
      */
     public static int fibMemo(int n) {
-        // YOUR CODE HERE
-        return 0;
+        if (n <= 1) {
+            return n;
+        }
+        if (map.containsKey(n)) {
+            return map.get(n);
+        }
+        int result = fibMemo(n - 1) + fibMemo(n - 2);
+        map.put(n, result);
+        return result;
     }
 
     /**
@@ -34,9 +42,7 @@ public class FibonacciMemo {
      * as the 47th Fibonacci number?
      */
     public static String why47() {
-        String answer = "potatoes";
-        answer += ", " + answer + " and tapioca";
-        return answer;
+        return "fibMemo(47) does not fit into the range of int";
     }
 
     public static void main(String[] args) {
