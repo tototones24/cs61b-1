@@ -25,8 +25,9 @@ public class Card {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Card) {
-            // YOUR CODE HERE 
+        if (o != null && o instanceof Card) {
+            Card c = (Card) o;
+            return this.suit == c.suit && this.number == c.number;
         }
         return false;
     }
@@ -34,6 +35,6 @@ public class Card {
     @Override
     public int hashCode() {
         // YOUR CODE HERE (this is possible in one concise line)
-        return 0;
+        return suit * 100 + number;
     }
 }
