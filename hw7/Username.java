@@ -39,11 +39,9 @@ public class Username {
 
     @Override
     public boolean equals(Object o) {
-        // YOUR CODE HERE
-        //
         if (o != null && o instanceof Username) {
             Username u = (username) o;
-            char c1 = 
+            return this.name.equalsIgnoreCase(u.name);
         }
         return false;
     }
