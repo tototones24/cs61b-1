@@ -1,0 +1,18 @@
+.gitlet
+   branches
+      .current-branch.txt
+      branch_name1.txt
+      branch_name2.txt
+   commits
+      1
+         file1
+         file2
+      2
+         file2-modified
+     ...
+      .current_unique_commmit_id_number.txt --monotone increasing
+   staging_area
+      copy_of_current_state_of_staged_files
+
+
+no need to save in files. use serialize.
