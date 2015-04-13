@@ -12,7 +12,7 @@ public class StagingArea {
         if (removedFiles.contains(fileName)) {
             removedFiles.remove(fileName);
         } else {
-            if (head.files.contains(fileName)){
+            if (head != null && head.files.contains(fileName)){
                 In oldFile = new In("./gitlet/"+head.id+"/"+fileName);
                 In newFile = new In(fileName);
                 if (oldFile.readAll().equals(newFile.readAll())){
