@@ -35,7 +35,10 @@ public class MasterState {
         c.message = message;
         c.created = new Timestamp((new GregorianCalendar()).getTime().getTime());
         c.id = currentUniqueID;
-        HashSet fileSet = new HashSet(old.files);
+        HashSet fileSet = new HashSet();
+        if (old != null) {
+            fileSet.addAll(old.files);
+        }
         fileSet.addAll(stage.stagedFiles);
         fileSet.removeAll(stage.removedFiles);
         c.files = fileSet;
