@@ -119,7 +119,7 @@ public class MasterState implements Serializable {
 
     public void checkoutFile(String name){
         Commit c = branches.get(currentBranch);
-        Path p = (new File("./gitlet/" + c.id + "/" + name)).toPath();
+        Path p = (new File("./.gitlet/" + c.id + "/" + name)).toPath();
         Path d = (new File(".")).toPath();
         try {
             Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
