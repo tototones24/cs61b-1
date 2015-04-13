@@ -1,5 +1,6 @@
 import java.util.*;
-public class StagingArea {
+import java.io.*;
+public class StagingArea implements Serializable {
     public HashSet<String> removedFiles;
     public HashSet<String> stagedFiles;
 

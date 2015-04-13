@@ -1,6 +1,7 @@
 import java.util.*;
 import java.sql.Timestamp;
-public class Commit {
+import java.io.*;
+public class Commit implements Serializable {
     public Commit previous;
     public HashSet<String> files;
     public String message;

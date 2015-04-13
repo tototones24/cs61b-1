@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.io.*;
 import java.sql.Timestamp;
 
-public class MasterState {
+public class MasterState implements Serializable {
     public HashMap<String, Commit> branches;
     public int currentUniqueID;
     public String currentBranch;
@@ -25,7 +25,10 @@ public class MasterState {
             out.close();
             fileOut.close();
         }
-        catch (IOException io) {}
+        catch (IOException io) {
+            System.out.println("something went wrong");
+            System.out.println(io);
+        }
     }
 
     public void commit(String message){
@@ -48,9 +51,12 @@ public class MasterState {
         newDir.mkdir();
         for (String name : stage.stagedFiles) {
             try {
-                Files.copy((new File(name)).toPath(), newDir.toPath());
+                File f = (new File(name)).toPath();
+                Files.copy(f, newDir.toPath().resolve(f.getFileName()));
             }
-            catch (IOException io) {}
+            catch (IOException io) {
+                System.out.println(io);
+            }
         }
         currentUniqueID++;
     }
