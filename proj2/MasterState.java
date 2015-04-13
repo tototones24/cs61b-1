@@ -137,9 +137,28 @@ public class MasterState implements Serializable {
             }
         }
         Commit c = branches.get(name);
-        //while (
-        //File commitDir = new File("./.gitlet/" + c.id);
-        //for (File f : commitDir)
+        HashSet filesLeftToCopy = new HashSet(c.files);
+
+        while (c != null) {
+            File commitDir = new File("./.gitlet/" + c.id);
+            for (File f : commitDir.listFiles()){
+                Path p = f.toPath();
+                if (!filesLeftToCopy.contains(p.getFileName())) {
+                    continue;
+                }
+                try {
+                    Files.copy(p,thisDir.toPath().resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                }
+                catch (IOException io) {
+                    System.out.println(io);
+                }
+                filesLeftToCopy.remove(p.getFileName());
+            }
+            if (filesLeftToCopy.size() == 0) {
+                break;
+            }
+            c = c.previous;
+        }
     }
 
     public void checkoutSpecific(int commitID, String name){}
