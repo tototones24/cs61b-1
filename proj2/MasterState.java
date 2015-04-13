@@ -51,7 +51,7 @@ public class MasterState implements Serializable {
         newDir.mkdir();
         for (String name : stage.stagedFiles) {
             try {
-                File f = (new File(name)).toPath();
+                Path f = (new File(name)).toPath();
                 Files.copy(f, newDir.toPath().resolve(f.getFileName()));
             }
             catch (IOException io) {
@@ -59,6 +59,7 @@ public class MasterState implements Serializable {
             }
         }
         currentUniqueID++;
+        stage = new StagingArea();
     }
 
 
@@ -121,9 +122,11 @@ public class MasterState implements Serializable {
         Path p = (new File("./gitlet/" + c.id + "/" + name)).toPath();
         Path d = (new File(".")).toPath();
         try {
-            Files.copy(p,d, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
         }
-        catch (IOException io) {}
+        catch (IOException io) {
+            System.out.println(io);
+        }
     }
 
     public void checkoutBranch(String name){
