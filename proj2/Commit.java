@@ -1,4 +1,3 @@
-package gitlet;
 import java.util.*;
 import java.sql.Timestamp;
 import java.io.*;

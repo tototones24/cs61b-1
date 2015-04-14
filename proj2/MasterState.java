@@ -1,4 +1,3 @@
-package gitlet;
 import java.util.*;
 import java.nio.file.*;
 import java.io.*;

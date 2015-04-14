@@ -1,4 +1,3 @@
-package gitlet;
 import java.io.*;
 
 public class Gitlet {
