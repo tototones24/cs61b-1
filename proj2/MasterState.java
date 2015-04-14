@@ -11,8 +11,14 @@ public class MasterState implements Serializable {
 
     public MasterState() {
         branches = new HashMap<String, Commit>();
-        branches.put("master", null);
-        currentUniqueID = 0;
+        Commit c = new Commit();
+        c.previous = null;
+        c.files = new HashSet();
+        c.message = "initial commit";
+        c.created = new Timestamp((new GregorianCalendar()).getTime().getTime());
+        c.id = 0;
+        branches.put("master", c);
+        currentUniqueID = 1;
         currentBranch = "master";
         stage = new StagingArea();
     }
@@ -47,7 +53,7 @@ public class MasterState implements Serializable {
         c.files = fileSet;
         branches.put(currentBranch, c);
 
-        File newDir = new File("./.gitlet/"+currentUniqueID);
+        File newDir = new File(".gitlet/"+currentUniqueID);
         newDir.mkdir();
         for (String name : stage.stagedFiles) {
             try {
@@ -119,8 +125,10 @@ public class MasterState implements Serializable {
 
     public void checkoutFile(String name){
         Commit c = branches.get(currentBranch);
+        //might not exist in that dir
         Path p = (new File("./.gitlet/" + c.id + "/" + name)).toPath();
         Path d = (new File(".")).toPath();
+        System.out.println(p.getFileName());
         try {
             Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
         }
@@ -140,9 +148,10 @@ public class MasterState implements Serializable {
         HashSet filesLeftToCopy = new HashSet(c.files);
 
         while (c != null) {
-            File commitDir = new File("./.gitlet/" + c.id);
+            File commitDir = new File(".gitlet/" + c.id);
             for (File f : commitDir.listFiles()){
                 Path p = f.toPath();
+                System.out.println(p.getFileName());
                 if (!filesLeftToCopy.contains(p.getFileName())) {
                     continue;
                 }

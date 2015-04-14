@@ -16,7 +16,9 @@ public class Gitlet {
                 fileIn.close();
             }
         }
-        catch (IOException io) {}
+        catch (IOException io) {
+            System.out.println(io);
+        }
         switch (args[0]) {
             case "init":
                 File dir = new File("./.gitlet");
