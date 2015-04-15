@@ -11,14 +11,6 @@ public class Commit implements Serializable {
     public int id;
 
     public void restore(){
-        Commit c = this;
-        File thisDir = new File(".");
-        for (File f : thisDir.listFiles()) {
-            if (!f.toString().equals(".gitlet")) {
-                f.delete();
-            }
-        }
-
         for (String s : files) {
             restoreFile(s);
         }
