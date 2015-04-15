@@ -3,7 +3,6 @@ import java.nio.file.*;
 import java.io.*;
 import java.sql.Timestamp;
 
-//asdfa
 public class MasterState implements Serializable {
     public HashMap<String, Commit> branches;
     public int currentUniqueID;
@@ -77,6 +76,7 @@ public class MasterState implements Serializable {
             System.out.println("Commit " + c.id + ".");
             System.out.println(c.created);
             System.out.println(c.message);
+            System.out.println();
             c = c.previous;
         }
     }

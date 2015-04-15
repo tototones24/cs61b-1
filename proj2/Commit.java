@@ -1,6 +1,8 @@
 import java.util.*;
 import java.sql.Timestamp;
 import java.io.*;
+import java.nio.file.*;
+
 public class Commit implements Serializable {
     public Commit previous;
     public HashSet<String> files;
@@ -9,6 +11,7 @@ public class Commit implements Serializable {
     public int id;
 
     public void restore(){
+        Commit c = this;
         File thisDir = new File(".");
         for (File f : thisDir.listFiles()) {
             if (!f.toString().equals(".gitlet")) {
