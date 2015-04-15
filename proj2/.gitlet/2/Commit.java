@@ -23,12 +23,12 @@ public class Commit implements Serializable {
 
         while (c != null) {
             File commitDir = new File(".gitlet/" + c.id);
-            for (String s : commitDir.list()){
-                if (!filesLeftToCopy.contains(s)){ 
+            for (File f : commitDir.listFiles()){
+                Path p = f.toPath();
+                if (!filesLeftToCopy.contains(p.getFileName())) {
+                    System.out.println(p.getFileName());
                     continue;
                 }
-
-                Path p = (new File(s)).toPath();
                 try {
                     Files.copy(p,thisDir.toPath().resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
                 }
@@ -41,27 +41,6 @@ public class Commit implements Serializable {
                 break;
             }
             c = c.previous;
-        }
-    }
-
-    public void getFile(String name){
-        Commit c = this;
-        if (!files.contains(name)){
-            return;
-        }
-        
-        File f = new File("./.gitlet/" + c.id + "/" + name);
-        while (!f.exists()) {
-            c = c.previous;
-            f = new File("./.gitlet/" + c.id + "/" + name);
-        }
-        Path p = f.toPath();
-        Path d = (new File(".")).toPath();
-        try {
-            Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch (IOException io) {
-            System.out.println(io);
         }
     }
 }

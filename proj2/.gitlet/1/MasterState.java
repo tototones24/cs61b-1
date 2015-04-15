@@ -80,7 +80,6 @@ public class MasterState implements Serializable {
             c = c.previous;
         }
     }
-
     public void globalLog() {
         for (Commit c : branches.values()) {
             while (c != null) {
@@ -128,7 +127,24 @@ public class MasterState implements Serializable {
     }
 
     public void checkoutFile(String name){
-        branches.get(currentBranch).getFile(name);
+        Commit c = branches.get(currentBranch);
+        if (!branches.get(currentBranch).files.contains(name)){
+            return;
+        }
+        
+        File f = new File("./.gitlet/" + c.id + "/" + name);
+        while (!f.exists()) {
+            c = c.previous;
+            f = new File("./.gitlet/" + c.id + "/" + name);
+        }
+        Path p = f.toPath();
+        Path d = (new File(".")).toPath();
+        try {
+            Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException io) {
+            System.out.println(io);
+        }
     }
 
     public void checkoutBranch(String name){
@@ -139,7 +155,22 @@ public class MasterState implements Serializable {
         for (Commit c : branches.values()) { 
             while (c != null){
                 if (c.id == commitID){
-                    c.getFile(name);
+                    if (!c.files.contains(name)){
+                        return;
+                    }
+                    File f = new File("./.gitlet/" + c.id + "/" + name);
+                    while (!f.exists()) {
+                        c = c.previous;
+                        f = new File("./.gitlet/" + c.id + "/" + name);
+                    }
+                    Path p = f.toPath();
+                    Path d = (new File(".")).toPath();
+                    try {
+                        Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    catch (IOException io) {
+                        System.out.println(io);
+                    }
                     return;
                 }
                 c = c.previous;
