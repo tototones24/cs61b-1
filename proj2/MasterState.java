@@ -178,7 +178,7 @@ public class MasterState implements Serializable {
             if (!current.files.contains(s)){
                 other.restoreFile(s);
             } else {
-                In oldFile = new In(currentBranch.getFile(s));
+                In oldFile = new In(current.getFile(s));
                 In newFile = new In(s);
 
                 if (newFile.exists() && oldFile.readAll().equals(newFile.readAll())){
@@ -208,7 +208,7 @@ public class MasterState implements Serializable {
         c = branches.get(currentBranch);
         if (seenID.contains(c.id)){
             branches.put(currentBranch, branches.get(branchName));
-            branches.get(currentBranch).restore;
+            branches.get(currentBranch).restore();
             return;
         }
 
@@ -220,7 +220,7 @@ public class MasterState implements Serializable {
         }
         //todo
 
-        branches.get(currentBranch).restore;
+        branches.get(currentBranch).restore();
     }
 
     public void advancedRebase(String branchName){}
