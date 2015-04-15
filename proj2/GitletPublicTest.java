@@ -49,66 +49,66 @@ public class GitletPublicTest {
      * that all tests are independent and do not interact with one another.
      */
     @Before
-    public void setUp() {
-        File f = new File(GITLET_DIR);
-        if (f.exists()) {
-            recursiveDelete(f);
+        public void setUp() {
+            File f = new File(GITLET_DIR);
+            if (f.exists()) {
+                recursiveDelete(f);
+            }
+            f = new File(TESTING_DIR);
+            if (f.exists()) {
+                recursiveDelete(f);
+            }
+            f.mkdirs();
         }
-        f = new File(TESTING_DIR);
-        if (f.exists()) {
-            recursiveDelete(f);
-        }
-        f.mkdirs();
-    }
 
     /**
      * Tests that init creates a .gitlet directory. Does NOT test that init
      * creates an initial commit, which is the other functionality of init.
      */
     @Test
-    public void testBasicInitialize() {
-        gitlet("init");
-        File f = new File(GITLET_DIR);
-        assertTrue(f.exists());
-    }
+        public void testBasicInitialize() {
+            gitlet("init");
+            File f = new File(GITLET_DIR);
+            assertTrue(f.exists());
+        }
 
     /**
      * Tests that checking out a file name will restore the version of the file
      * from the previous commit. Involves init, add, commit, and checkout.
      */
     @Test
-    public void testBasicCheckout() {
-        String wugFileName = TESTING_DIR + "wug.txt";
-        String wugText = "This is a wug.";
-        createFile(wugFileName, wugText);
-        gitlet("init");
-        gitlet("add", wugFileName);
-        gitlet("commit", "added wug");
-        writeFile(wugFileName, "This is not a wug.");
-        gitlet("checkout", wugFileName);
-        assertEquals(wugText, getText(wugFileName));
-    }
+        public void testBasicCheckout() {
+            String wugFileName = TESTING_DIR + "wug.txt";
+            String wugText = "This is a wug.";
+            createFile(wugFileName, wugText);
+            gitlet("init");
+            gitlet("add", wugFileName);
+            gitlet("commit", "added wug");
+            writeFile(wugFileName, "This is not a wug.");
+            gitlet("checkout", wugFileName);
+            assertEquals(wugText, getText(wugFileName));
+        }
 
     /**
      * Tests that log prints out commit messages in the right order. Involves
      * init, add, commit, and log.
      */
     @Test
-    public void testBasicLog() {
-        gitlet("init");
-        String commitMessage1 = "initial commit";
+        public void testBasicLog() {
+            gitlet("init");
+            String commitMessage1 = "initial commit";
 
-        String wugFileName = TESTING_DIR + "wug.txt";
-        String wugText = "This is a wug.";
-        createFile(wugFileName, wugText);
-        gitlet("add", wugFileName);
-        String commitMessage2 = "added wug";
-        gitlet("commit", commitMessage2);
+            String wugFileName = TESTING_DIR + "wug.txt";
+            String wugText = "This is a wug.";
+            createFile(wugFileName, wugText);
+            gitlet("add", wugFileName);
+            String commitMessage2 = "added wug";
+            gitlet("commit", commitMessage2);
 
-        String logContent = gitlet("log");
-        assertArrayEquals(new String[] { commitMessage2, commitMessage1 },
-                extractCommitMessages(logContent));
-    }
+            String logContent = gitlet("log");
+            assertArrayEquals(new String[] { commitMessage2, commitMessage1 },
+                    extractCommitMessages(logContent));
+        }
 
     /**
      * Convenience method for calling Gitlet's main. Anything that is printed

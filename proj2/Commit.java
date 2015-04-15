@@ -29,7 +29,7 @@ public class Commit implements Serializable {
         if (!files.contains(name)){
             return null;
         }
-        
+
         File f = new File(".gitlet/" + c.id + "/" + name);
         while (!f.exists()) {
             c = c.previous;
@@ -43,7 +43,7 @@ public class Commit implements Serializable {
         if (!files.contains(name)){
             return;
         }
-        
+
         Path p = getFile(name).toPath();
         Path d = (new File(".")).toPath();
         try {

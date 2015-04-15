@@ -32,12 +32,19 @@ public class MasterState implements Serializable {
             fileOut.close();
         }
         catch (IOException io) {
-            System.out.println("something went wrong");
             System.out.println(io);
         }
     }
 
     public void commit(String message){
+        if ((stage.stagedFiles.size() + stage.removedFiles.size()) == 0){
+            System.out.println("No changes added to the commit.");
+            return;
+        }
+        if (message.equals("")) {
+            System.out.println("Please enter a commit message.");
+            return;
+        }
         Commit c = new Commit();
         Commit old = branches.get(currentBranch);
         c.previous = old;
@@ -98,13 +105,18 @@ public class MasterState implements Serializable {
     }
 
     public void find(String message) {
+        boolean found = false;
         for (Commit c : branches.values()) {
             while (c != null) {
                 if (c.message.equals(message)) {
                     System.out.println(c.id);
+                    found = true;
                 }
                 c = c.previous;
             }
+        }
+        if (!found) {
+            System.out.println("Found no commit with that message.");
         }
     }
 
@@ -131,6 +143,10 @@ public class MasterState implements Serializable {
     }
 
     public void checkoutFile(String name){
+        if (!branches.get(currentBranch).files.contains(name)){
+            System.out.println("File does not exist in the most recent commit, or no such branch exists.");
+            return;
+        }
         branches.get(currentBranch).restoreFile(name);
     }
 
@@ -143,19 +159,37 @@ public class MasterState implements Serializable {
         for (Commit c : branches.values()) { 
             while (c != null){
                 if (c.id == commitID){
+                    if (!c.files.contains(name)){
+                        System.out.println("File does not exist in that commit.");
+                        return;
+                    }
                     c.restoreFile(name);
                     return;
                 }
                 c = c.previous;
             }
         }
+        System.out.println("No commit with that id exists.");
     }
 
     public void branch(String name){
+        if (branches.containsKey(name)) {
+            System.out.println("A branch with that name already exists.");
+            return;
+        }
         branches.put(name, branches.get(currentBranch));
     }
 
     public void removeBranch(String name){
+        if (!branches.containsKey(name)) {
+            System.out.println("A branch with that name does not exist.");
+            return;
+        }
+        if (currentBranch.equals(name)) {
+            System.out.println("Cannot remove the current branch.");
+            return;
+
+        }
         branches.remove(name);
     }
 
@@ -169,6 +203,7 @@ public class MasterState implements Serializable {
                 c = c.previous;
             }
         }
+        System.out.println("No commit with that id exists.");
     }
 
     public void merge(String branchName){
