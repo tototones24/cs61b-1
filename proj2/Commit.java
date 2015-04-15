@@ -1,7 +1,11 @@
-import java.util.*;
+import java.util.HashSet;
 import java.sql.Timestamp;
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.io.File;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class Commit implements Serializable {
     public Commit previous;
@@ -10,7 +14,7 @@ public class Commit implements Serializable {
     public Timestamp created;
     public int id;
 
-    public void restore(){
+    public void restore() {
         for (String s : files) {
             restoreFile(s);
         }
@@ -18,7 +22,7 @@ public class Commit implements Serializable {
 
     public File getFile(String name) {
         Commit c = this;
-        if (!files.contains(name)){
+        if (!files.contains(name)) {
             return null;
         }
 
@@ -30,18 +34,17 @@ public class Commit implements Serializable {
         return f;
     }
 
-    public void restoreFile(String name){
+    public void restoreFile(String name) {
         Commit c = this;
-        if (!files.contains(name)){
+        if (!files.contains(name)) {
             return;
         }
 
         Path p = getFile(name).toPath();
         Path d = (new File(".")).toPath();
         try {
-            Files.copy(p,d.resolve(name), StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch (IOException io) {
+            Files.copy(p, d.resolve(name), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException io) {
             System.out.println(io);
         }
     }

@@ -1,6 +1,17 @@
-import java.util.*;
-import java.nio.file.*;
-import java.io.*;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Set;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.util.GregorianCalendar;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
 import java.sql.Timestamp;
 
 public class MasterState implements Serializable {
@@ -23,21 +34,20 @@ public class MasterState implements Serializable {
         stage = new StagingArea();
     }
 
-    public void save(){
+    public void save() {
         try {
             FileOutputStream fileOut = new FileOutputStream("./.gitlet/state");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(this);
             out.close();
             fileOut.close();
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             System.out.println(io);
         }
     }
 
-    public void commit(String message){
-        if ((stage.stagedFiles.size() + stage.removedFiles.size()) == 0){
+    public void commit(String message) {
+        if ((stage.stagedFiles.size() + stage.removedFiles.size()) == 0) {
             System.out.println("No changes added to the commit.");
             return;
         }
@@ -60,7 +70,7 @@ public class MasterState implements Serializable {
         c.files = fileSet;
         branches.put(currentBranch, c);
 
-        File newDir = new File(".gitlet/"+currentUniqueID);
+        File newDir = new File(".gitlet/" + currentUniqueID);
         newDir.mkdir();
         for (String name : stage.stagedFiles) {
             try {
@@ -70,8 +80,7 @@ public class MasterState implements Serializable {
                     newDir.toPath().resolve(possibleExtraDir).toFile().mkdir();
                 }
                 Files.copy(p, newDir.toPath().resolve(p));
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 System.out.println(io);
             }
         }
@@ -142,24 +151,26 @@ public class MasterState implements Serializable {
         }
     }
 
-    public void checkoutFile(String name){
-        if (!branches.get(currentBranch).files.contains(name)){
-            System.out.println("File does not exist in the most recent commit, or no such branch exists.");
+    public void checkoutFile(String name) {
+        if (!branches.get(currentBranch).files.contains(name)) {
+            System.out.println(
+                    "File does not exist in the most recent commit, or no such branch exists.");
             return;
         }
+
         branches.get(currentBranch).restoreFile(name);
     }
 
-    public void checkoutBranch(String name){
+    public void checkoutBranch(String name) {
         branches.get(name).restore();
         currentBranch = name;
     }
 
-    public void checkoutSpecific(int commitID, String name){
+    public void checkoutSpecific(int commitID, String name) {
         for (Commit c : branches.values()) { 
-            while (c != null){
-                if (c.id == commitID){
-                    if (!c.files.contains(name)){
+            while (c != null) {
+                if (c.id == commitID) {
+                    if (!c.files.contains(name)) {
                         System.out.println("File does not exist in that commit.");
                         return;
                     }
@@ -172,7 +183,7 @@ public class MasterState implements Serializable {
         System.out.println("No commit with that id exists.");
     }
 
-    public void branch(String name){
+    public void branch(String name) {
         if (branches.containsKey(name)) {
             System.out.println("A branch with that name already exists.");
             return;
@@ -180,7 +191,7 @@ public class MasterState implements Serializable {
         branches.put(name, branches.get(currentBranch));
     }
 
-    public void removeBranch(String name){
+    public void removeBranch(String name) {
         if (!branches.containsKey(name)) {
             System.out.println("A branch with that name does not exist.");
             return;
@@ -193,10 +204,10 @@ public class MasterState implements Serializable {
         branches.remove(name);
     }
 
-    public void reset(int commitID){
+    public void reset(int commitID) {
         for (Commit c : branches.values()) {
-            while (c != null){
-                if (c.id == commitID){
+            while (c != null) {
+                if (c.id == commitID) {
                     c.restore();
                     return;
                 }
@@ -206,26 +217,26 @@ public class MasterState implements Serializable {
         System.out.println("No commit with that id exists.");
     }
 
-    public void merge(String branchName){
+    public void merge(String branchName) {
         Commit other = branches.get(branchName);
         Commit current = branches.get(currentBranch);
-        for (String s : other.files){
-            if (!current.files.contains(s)){
+        for (String s : other.files) {
+            if (!current.files.contains(s)) {
                 other.restoreFile(s);
             } else {
                 In oldFile = new In(current.getFile(s));
                 In newFile = new In(s);
 
-                if (newFile.exists() && oldFile.readAll().equals(newFile.readAll())){
+                if (newFile.exists() && oldFile.readAll().equals(newFile.readAll())) {
                     other.restoreFile(s);
                 } else {
                     File f = other.getFile(s);
                     Path d = (new File(".")).toPath();
 
                     try {
-                        Files.copy(f.toPath(),d.resolve(s + ".conflicted"), StandardCopyOption.REPLACE_EXISTING);
-                    } 
-                    catch (IOException io) {
+                        Files.copy(f.toPath(), d.resolve(s + ".conflicted"), 
+                                StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException io) {
                         System.out.println(io);
                     }
                 }
@@ -234,29 +245,9 @@ public class MasterState implements Serializable {
         }
     }
 
-    public void rebase(String branchName){
-        Commit c = branches.get(branchName);
-        HashSet<Integer> seenID = new HashSet<Integer>();
-        while (c != null){
-            seenID.add(c.id);
-        }
-        c = branches.get(currentBranch);
-        if (seenID.contains(c.id)){
-            branches.put(currentBranch, branches.get(branchName));
-            branches.get(currentBranch).restore();
-            return;
-        }
-
-        ArrayList<Commit> arr = new ArrayList();
-
-        while (!seenID.contains(c.id)){
-            arr.add(c);
-            c = c.previous;
-        }
-        //todo
-
-        branches.get(currentBranch).restore();
+    public void rebase(String branchName) {
     }
 
-    public void advancedRebase(String branchName){}
+    public void advancedRebase(String branchName) {
+    }
 }
