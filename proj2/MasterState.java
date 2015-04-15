@@ -94,12 +94,13 @@ public class MasterState implements Serializable {
     }
 
     public void find(String message) {
-        Commit c = branches.get(currentBranch);
-        while (c != null) {
-            if (c.message.equals(message)) {
-                System.out.println(c.id);
+        for (Commit c : branches.values()) {
+            while (c != null) {
+                if (c.message.equals(message)) {
+                    System.out.println(c.id);
+                }
+                c = c.previous;
             }
-            c = c.previous;
         }
     }
 
@@ -127,7 +128,6 @@ public class MasterState implements Serializable {
 
     public void checkoutFile(String name){
         Commit c = branches.get(currentBranch);
-        //might not exist in that dir
         if (!branches.get(currentBranch).files.contains(name)){
             return;
         }
@@ -152,28 +152,29 @@ public class MasterState implements Serializable {
     }
 
     public void checkoutSpecific(int commitID, String name){
-        Commit c = branches.get(currentBranch);
-        while (c != null){
-            if (c.id == commitID){
-                if (!c.files.contains(name)){
+        for (Commit c : branches.values()) { 
+            while (c != null){
+                if (c.id == commitID){
+                    if (!c.files.contains(name)){
+                        return;
+                    }
+                    File f = new File("./.gitlet/" + c.id + "/" + name);
+                    while (!f.exists()) {
+                        c = c.previous;
+                        f = new File("./.gitlet/" + c.id + "/" + name);
+                    }
+                    Path p = f.toPath();
+                    Path d = (new File(".")).toPath();
+                    try {
+                        Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    catch (IOException io) {
+                        System.out.println(io);
+                    }
                     return;
                 }
-                File f = new File("./.gitlet/" + c.id + "/" + name);
-                while (!f.exists()) {
-                    c = c.previous;
-                    f = new File("./.gitlet/" + c.id + "/" + name);
-                }
-                Path p = f.toPath();
-                Path d = (new File(".")).toPath();
-                try {
-                    Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-                }
-                catch (IOException io) {
-                    System.out.println(io);
-                }
-                return;
+                c = c.previous;
             }
-            c = c.previous;
         }
     }
 
@@ -187,12 +188,14 @@ public class MasterState implements Serializable {
 
     public void reset(int commitID){
         Commit c = branches.get(currentBranch);
-        while (c != null){
-            if (c.id == commitID){
-                c.restore();
-                return;
+        for (Commit c : branches.values()) {
+            while (c != null){
+                if (c.id == commitID){
+                    c.restore();
+                    return;
+                }
+                c = c.previous;
             }
-            c = c.previous;
         }
     }
 
@@ -200,6 +203,7 @@ public class MasterState implements Serializable {
         //read spec carefully for this one!
         //don't forget to add to staging area
     }
+
     public void rebase(String branchName){}
     public void advancedRebase(String branchName){}
 }

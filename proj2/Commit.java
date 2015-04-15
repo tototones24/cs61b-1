@@ -26,6 +26,7 @@ public class Commit implements Serializable {
             for (File f : commitDir.listFiles()){
                 Path p = f.toPath();
                 if (!filesLeftToCopy.contains(p.getFileName())) {
+                    System.out.println(p.getFileName());
                     continue;
                 }
                 try {
