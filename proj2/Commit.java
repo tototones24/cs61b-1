@@ -19,28 +19,8 @@ public class Commit implements Serializable {
             }
         }
 
-        HashSet filesLeftToCopy = new HashSet(files);
-
-        while (c != null) {
-            File commitDir = new File(".gitlet/" + c.id);
-            for (String s : commitDir.list()){
-                if (!filesLeftToCopy.contains(s)){ 
-                    continue;
-                }
-
-                Path p = (new File(s)).toPath();
-                try {
-                    Files.copy(p,thisDir.toPath().resolve(p), StandardCopyOption.REPLACE_EXISTING);
-                }
-                catch (IOException io) {
-                    System.out.println(io);
-                }
-                filesLeftToCopy.remove(p.getFileName());
-            }
-            if (filesLeftToCopy.size() == 0) {
-                break;
-            }
-            c = c.previous;
+        for (String s : files) {
+            getFile(s);
         }
     }
 
@@ -50,15 +30,15 @@ public class Commit implements Serializable {
             return;
         }
         
-        File f = new File("./.gitlet/" + c.id + "/" + name);
+        File f = new File(".gitlet/" + c.id + "/" + name);
         while (!f.exists()) {
             c = c.previous;
-            f = new File("./.gitlet/" + c.id + "/" + name);
+            f = new File(".gitlet/" + c.id + "/" + name);
         }
         Path p = f.toPath();
         Path d = (new File(".")).toPath();
         try {
-            Files.copy(p,d.resolve(p), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(p,d.resolve(name), StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException io) {
             System.out.println(io);
