@@ -30,7 +30,7 @@ public class Commit implements Serializable {
 
                 Path p = (new File(s)).toPath();
                 try {
-                    Files.copy(p,thisDir.toPath().resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(p,thisDir.toPath().resolve(p), StandardCopyOption.REPLACE_EXISTING);
                 }
                 catch (IOException io) {
                     System.out.println(io);
@@ -58,7 +58,7 @@ public class Commit implements Serializable {
         Path p = f.toPath();
         Path d = (new File(".")).toPath();
         try {
-            Files.copy(p,d.resolve(p.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(p,d.resolve(p), StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException io) {
             System.out.println(io);

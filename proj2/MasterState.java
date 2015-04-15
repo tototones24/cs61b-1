@@ -57,8 +57,8 @@ public class MasterState implements Serializable {
         newDir.mkdir();
         for (String name : stage.stagedFiles) {
             try {
-                Path f = (new File(name)).toPath();
-                Files.copy(f, newDir.toPath().resolve(f.getFileName()));
+                Path p = (new File(name)).toPath();
+                Files.copy(p, newDir.toPath().resolve(p));
             }
             catch (IOException io) {
                 System.out.println(io);
