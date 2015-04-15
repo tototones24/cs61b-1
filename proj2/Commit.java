@@ -20,14 +20,14 @@ public class Commit implements Serializable {
         }
 
         for (String s : files) {
-            getFile(s);
+            restoreFile(s);
         }
     }
 
-    public void getFile(String name){
+    public File getFile(String name) {
         Commit c = this;
         if (!files.contains(name)){
-            return;
+            return null;
         }
         
         File f = new File(".gitlet/" + c.id + "/" + name);
@@ -35,7 +35,16 @@ public class Commit implements Serializable {
             c = c.previous;
             f = new File(".gitlet/" + c.id + "/" + name);
         }
-        Path p = f.toPath();
+        return f;
+    }
+
+    public void restoreFile(String name){
+        Commit c = this;
+        if (!files.contains(name)){
+            return;
+        }
+        
+        Path p = getFile(name).toPath();
         Path d = (new File(".")).toPath();
         try {
             Files.copy(p,d.resolve(name), StandardCopyOption.REPLACE_EXISTING);

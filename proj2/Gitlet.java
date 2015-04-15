@@ -76,6 +76,14 @@ public class Gitlet {
                 state.save();
                 break;
             case "merge":
+                if (!state.branches.containsKey(args[1])) {
+                    System.out.println("A branch with that name does not exist.");
+                    break;
+                }
+                if (args[1].equals(state.currentBranch)) {
+                    System.out.println("Cannot merge a branch with itself.");
+                    break;
+                }
                 state.merge(args[1]);
                 state.save();
                 break;

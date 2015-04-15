@@ -14,7 +14,7 @@ public class StagingArea implements Serializable {
             removedFiles.remove(fileName);
         } else {
             if (head != null && head.files.contains(fileName)){
-                In oldFile = new In(".gitlet/"+head.id+"/"+fileName);
+                In oldFile = new In(head.getFile(fileName));
                 In newFile = new In(fileName);
                 if (oldFile.readAll().equals(newFile.readAll())){
                     System.out.println("File has not been modified since the last commit.");

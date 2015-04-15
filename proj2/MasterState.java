@@ -72,7 +72,6 @@ public class MasterState implements Serializable {
         stage = new StagingArea();
     }
 
-
     public void log() {
         Commit c = branches.get(currentBranch);
         while (c != null) {
@@ -132,18 +131,19 @@ public class MasterState implements Serializable {
     }
 
     public void checkoutFile(String name){
-        branches.get(currentBranch).getFile(name);
+        branches.get(currentBranch).restoreFile(name);
     }
 
     public void checkoutBranch(String name){
         branches.get(name).restore();
+        currentBranch = name;
     }
 
     public void checkoutSpecific(int commitID, String name){
         for (Commit c : branches.values()) { 
             while (c != null){
                 if (c.id == commitID){
-                    c.getFile(name);
+                    c.restoreFile(name);
                     return;
                 }
                 c = c.previous;
@@ -172,10 +172,56 @@ public class MasterState implements Serializable {
     }
 
     public void merge(String branchName){
-        //read spec carefully for this one!
-        //don't forget to add to staging area
+        Commit other = branches.get(branchName);
+        Commit current = branches.get(currentBranch);
+        for (String s : other.files){
+            if (!current.files.contains(s)){
+                other.restoreFile(s);
+            } else {
+                In oldFile = new In(currentBranch.getFile(s));
+                In newFile = new In(s);
+
+                if (newFile.exists() && oldFile.readAll().equals(newFile.readAll())){
+                    other.restoreFile(s);
+                } else {
+                    File f = other.getFile(s);
+                    Path d = (new File(".")).toPath();
+
+                    try {
+                        Files.copy(f.toPath(),d.resolve(s + ".conflicted"), StandardCopyOption.REPLACE_EXISTING);
+                    } 
+                    catch (IOException io) {
+                        System.out.println(io);
+                    }
+                }
+            }
+
+        }
     }
 
-    public void rebase(String branchName){}
+    public void rebase(String branchName){
+        Commit c = branches.get(branchName);
+        HashSet<Integer> seenID = new HashSet<Integer>();
+        while (c != null){
+            seenID.add(c.id);
+        }
+        c = branches.get(currentBranch);
+        if (seenID.contains(c.id)){
+            branches.put(currentBranch, branches.get(branchName));
+            branches.get(currentBranch).restore;
+            return;
+        }
+
+        ArrayList<Commit> arr = new ArrayList();
+
+        while (!seenID.contains(c.id)){
+            arr.add(c);
+            c = c.previous;
+        }
+        //todo
+
+        branches.get(currentBranch).restore;
+    }
+
     public void advancedRebase(String branchName){}
 }
