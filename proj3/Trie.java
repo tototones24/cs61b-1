@@ -43,7 +43,7 @@ public class Trie {
             Trie t = new Trie();
             map.put(s.charAt(0), t);
             if (s.length() == 1) {
-                exists = true;
+                t.exists = true;
             } else {
                 t.insert(s.substring(1));
             }
@@ -60,7 +60,7 @@ public class Trie {
             if (map.containsKey(c)){
                 builder.append(c);
                 map.get(c).printWithAlphabet(alphabet, builder);
-                builder.deleteCharAt(builder.length());
+                builder.deleteCharAt(builder.length() - 1);
             }
         }
     }
