@@ -24,20 +24,23 @@ public class Sorts {
     public static int[] countingSort(int[] keys, int whichDigit) {
         int mask = 15 << (4 * whichDigit);
         //initialized to 0?
-        int[] countArray = new int[16];
+        int[] countArray = new int[17];
+        for (int i=0; i<17; i++) {
+            countArray[i] = 0;
+        }
         int[] result = new int[keys.length];
         int bits;
         int index;
         for (int x : keys) {
             bits = (x & mask) >> (4 * whichDigit);
-            countArray[bits]++;
+            countArray[bits + 1]++;
         }
-        for (int i = 1; i < 16; i++){
+        for (int i = 1; i < 17; i++){
             countArray[i] = countArray[i] + countArray[i-1];
         }
         for (int x : keys) {
             bits = (x & mask) >> (4 * whichDigit);
-            index = countArray[bits] - 1;
+            index = countArray[bits];
             countArray[bits]++;
             result[index] = x;
         }
