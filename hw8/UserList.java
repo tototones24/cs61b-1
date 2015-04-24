@@ -211,8 +211,6 @@ public class UserList {
     *   If two Users have printed the same number of pages, the User with the smaller user ID is first.
     **/
     public void sortByBothFeatures(){
-        //maybe have to use mergesort for stability
-        //todo
         quickSort("id");
         quickSort("pages");
     }
