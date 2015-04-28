@@ -16,8 +16,11 @@ public class Trie {
 
 
     public boolean find(String s, boolean isFullWord) {
-        if (s == null || s.equals("")) {
+        if (s == null) { 
             return false;
+        }
+        if (s.equals("")) {
+            return exists;
         }
         if (!map.containsKey(s.charAt(0))) {
             return false;
@@ -43,7 +46,8 @@ public class Trie {
             Trie t = new Trie();
             map.put(s.charAt(0), t);
             if (s.length() == 1) {
-                t.exists = true;
+                //t.exists = true;
+                exists = true;
             } else {
                 t.insert(s.substring(1));
             }
@@ -65,7 +69,6 @@ public class Trie {
         }
     }
 
-    /*
     public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("hello");
@@ -78,5 +81,4 @@ public class Trie {
         System.out.println(t.find("heyy", false));
         System.out.println(t.find("hell", true));   
     }
-    */
 }
