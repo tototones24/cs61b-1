@@ -20,16 +20,12 @@ public class Trie {
             return false;
         }
         if (s.equals("")) {
-            return exists;
+            return (!isFullWord) || exists;
         }
         if (!map.containsKey(s.charAt(0))) {
             return false;
         }
-        if (s.length() == 1) {
-            return (!isFullWord) || exists;
-        } else {
-            return map.get(s.charAt(0)).find(s.substring(1), isFullWord);
-        }
+        return map.get(s.charAt(0)).find(s.substring(1), isFullWord);
     }
 
     public void insert(String s){
@@ -46,8 +42,9 @@ public class Trie {
             Trie t = new Trie();
             map.put(s.charAt(0), t);
             if (s.length() == 1) {
-                //t.exists = true;
-                exists = true;
+                //conflicts with regular operations!!!!
+                t.exists = true;
+                //exists = true;
             } else {
                 t.insert(s.substring(1));
             }
@@ -56,6 +53,7 @@ public class Trie {
 
 
     public void printWithAlphabet(String alphabet, StringBuilder builder){
+        //conflicts with regular operations!!!!
         if (exists){
             System.out.println(builder);
         }
@@ -68,12 +66,14 @@ public class Trie {
             }
         }
     }
-
+/*
     public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("hello");
         t.insert("hey");
         t.insert("goodbye");
+        t.printWithAlphabet("abcdefghijklmnopqrstuvwxyz" 
+                           ,new StringBuilder());
         System.out.println(t.find("hell", false));
         System.out.println(t.find("hello", true));
         System.out.println(t.find("good", false));
@@ -81,4 +81,5 @@ public class Trie {
         System.out.println(t.find("heyy", false));
         System.out.println(t.find("hell", true));   
     }
+    */
 }
