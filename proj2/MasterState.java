@@ -224,6 +224,8 @@ public class MasterState implements Serializable {
             if (!current.files.contains(s)) {
                 other.restoreFile(s);
             } else {
+                //this is wrong. should be comparing against file at the split
+                //point commit
                 In oldFile = new In(current.getFile(s));
                 In newFile = new In(s);
 
