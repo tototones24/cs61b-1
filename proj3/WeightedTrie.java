@@ -61,8 +61,8 @@ public class WeightedTrie {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
-        if (s.length() == 1){
-            return (c == s.charAt(0)) && down == null && left == null && right == null; 
+        if (s.length() == 1 && c == s.charAt(0)){
+            return down == null && left == null && right == null; 
         }
         if (c < s.charAt(0)) {
             if (right == null) {
@@ -83,9 +83,48 @@ public class WeightedTrie {
     }
 
     public String topMatch(String prefix) {
-        return null;
+        if (prefix == null || prefix.equals("")) {
+            throw new IllegalArgumentException();
+        }
+        return topMatch(prefix, new StringBuffer());
     }
 
+    public String topMatch(String prefix, StringBuffer buf) {
+        if (prefix.equals("")){ 
+            if (left == null && down == null && right == null) {
+                buf.append(c);
+                return buf.toString();
+            }
+            if (left != null && left.maxWeight == maxWeight) {
+                return left.topMatch(prefix, buf);
+            }
+            if (down != null && down.maxWeight == maxWeight) {
+                buf.append(c);
+                return down.topMatch(prefix, buf);
+            }
+            if (right != null && right.maxWeight == maxWeight) {
+                return right.topMatch(prefix, buf);
+            }
+        }
+
+        if (c < prefix.charAt(0)) {
+            if (right == null) {
+                return null;
+            }
+            return right.topMatch(prefix, buf);
+        } else if (c == prefix.charAt(0)) {
+            if (down == null) {
+                return null;
+            }
+            buf.append(c);
+            return down.topMatch(prefix.substring(1), buf);
+        } else {
+            if (left == null) {
+                return null;
+            }
+            return left.topMatch(prefix.substring(1), buf);
+        }
+    }
 
     public double getWeight(String s){
         if (s == null || s.equals("")) {
@@ -129,9 +168,12 @@ public class WeightedTrie {
         t.insert("hello", 4);
         t.insert("hey", 5);
         t.insert("hey", 5);
+        t.insert("heya", 75);
         t.insert("goodbye", 8);
 
+        System.out.println(t.topMatch("hey"));
         //t.printTree();
+        /*
         System.out.println(t.find("haha"));
         System.out.println(t.find("goodbye"));
         System.out.println(t.find("hey"));
@@ -139,5 +181,6 @@ public class WeightedTrie {
         System.out.println(t.find("goodby "));
         System.out.println(t.find("bye"));
         System.out.println(t.find("hell"));
+        */
     }
 }

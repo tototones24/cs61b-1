@@ -7,7 +7,12 @@ public class Autocomplete {
      * @param terms Array of terms.
      * @param weights Array of weights.
      */
+    WeightedTrie trie;
     public Autocomplete(String[] terms, double[] weights) {
+        trie = new WeightedTrie(terms[0], weights[0]);
+        for (int i=1; i<terms.length; i++){
+            trie.insert(terms[i], weights[i]);
+        }
     }
 
     /**
@@ -16,6 +21,7 @@ public class Autocomplete {
      * @return
      */
     public double weightOf(String term) {
+        return trie.getWeight(term);
     }
 
     /**
@@ -24,6 +30,7 @@ public class Autocomplete {
      * @return Best (highest weight) matching string in the dictionary.
      */
     public String topMatch(String prefix) {
+        return trie.topMatch(prefix);
     }
 
     /**
@@ -34,6 +41,7 @@ public class Autocomplete {
      * @return
      */
     public Iterable<String> topMatches(String prefix, int k) {
+        return null;
     }
 
     /**
@@ -45,9 +53,9 @@ public class Autocomplete {
      * @return Iterable in descending weight order of the matches
      */
     public Iterable<String> spellCheck(String word, int dist, int k) {
-        LinkedList<String> results = new LinkedList<String>();  
+        //LinkedList<String> results = new LinkedList<String>();  
         /* YOUR CODE HERE; LEAVE BLANK IF NOT PURSUING BONUS */
-        return results;
+        return null;
     }
     /**
      * Test client. Reads the data from the file, 
