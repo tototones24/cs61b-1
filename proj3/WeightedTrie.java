@@ -95,10 +95,6 @@ public class WeightedTrie {
                 buf.append(c);
                 return buf.toString();
             }
-            if (down == null && left == null && right == null) {
-                buf.append(c);
-                return buf.toString();
-            } 
             if (left != null && left.maxWeight == maxWeight) {
                 return left.topMatch(prefix, buf);
             }
@@ -135,6 +131,18 @@ public class WeightedTrie {
             return left.topMatch(prefix, buf);
         }
     }
+
+    public Iterable<String> topMatches(String prefix, int k) {
+        if (s == null || s.equals("")) {
+            throw new IllegalArgumentException();
+        }
+
+        return topMatches(prefix,new StringBuffer(prefix), new ArrayList(), k);
+    }
+
+    public Iterable<String> topMatches(String prefix, StringBuffer buf, ArrayList arr, int k) {
+    }
+
 
     public double getWeight(String s){
         if (s == null || s.equals("")) {
