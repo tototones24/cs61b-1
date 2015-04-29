@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.HashSet;
 public class AlphabetSort {
     public static void main(String[] args){
         //use stringbuider and push & pop as you traverse the trie
@@ -7,7 +8,7 @@ public class AlphabetSort {
             throw new IllegalArgumentException();
         }
         String alphabet = in.nextLine();
-        Set<Character> s = new Set();
+        HashSet<Character> s = new HashSet();
         for (int i=0; i<alphabet.length();i++){
             s.add(alphabet.charAt(i));
         }
