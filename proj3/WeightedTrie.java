@@ -1,4 +1,5 @@
 //use tenary trie much better
+import java.util.ArrayList;
 public class WeightedTrie {
     //max wieght >= 0 amongst sub tries 
     char c;
@@ -133,7 +134,7 @@ public class WeightedTrie {
     }
 
     public Iterable<String> topMatches(String prefix, int k) {
-        if (s == null || s.equals("")) {
+        if (prefix == null || prefix.equals("")) {
             throw new IllegalArgumentException();
         }
 
@@ -141,6 +142,7 @@ public class WeightedTrie {
     }
 
     public Iterable<String> topMatches(String prefix, StringBuffer buf, ArrayList arr, int k) {
+        return null;
     }
 
 
