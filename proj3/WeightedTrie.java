@@ -91,10 +91,14 @@ public class WeightedTrie {
 
     public String topMatch(String prefix, StringBuffer buf) {
         if (prefix.equals("")){ 
-            if (left == null && down == null && right == null) {
+            if (weight == maxWeight) {
                 buf.append(c);
                 return buf.toString();
             }
+            if (down == null && left == null && right == null) {
+                buf.append(c);
+                return buf.toString();
+            } 
             if (left != null && left.maxWeight == maxWeight) {
                 return left.topMatch(prefix, buf);
             }
@@ -107,6 +111,12 @@ public class WeightedTrie {
             }
         }
 
+        if (prefix.length() == 1 && c == prefix.charAt(0)) {
+            if (left == null && down == null && right == null) {
+                buf.append(c);
+                return buf.toString();
+            }
+        }
         if (c < prefix.charAt(0)) {
             if (right == null) {
                 return null;
@@ -122,7 +132,7 @@ public class WeightedTrie {
             if (left == null) {
                 return null;
             }
-            return left.topMatch(prefix.substring(1), buf);
+            return left.topMatch(prefix, buf);
         }
     }
 
@@ -130,19 +140,26 @@ public class WeightedTrie {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
-        if (s.length() == 1){
-            if (down == null && left == null && right == null) {
+        if (s.length() == 1 && c == s.charAt(0)) {
+            if (!Double.isNaN(weight)) { 
                 return weight;
-            } else {
+            }
+        } 
+        if (c < s.charAt(0)) {
+            if (right == null) {
                 return 0;
             }
-        }
-        if (c < s.charAt(0)) {
-            return right.getWeight(s.substring(1));
+            return right.getWeight(s);
         } else if (c == s.charAt(0)) {
+            if (down == null) {
+                return 0;
+            }
             return down.getWeight(s.substring(1));
         } else {
-            return left.getWeight(s.substring(1));
+            if (left == null) {
+                return 0;
+            }
+            return left.getWeight(s);
         }
     }
 
@@ -162,16 +179,24 @@ public class WeightedTrie {
             right.printTree();
         }
     }
-
     public static void main(String[] args) {
         WeightedTrie t = new WeightedTrie("haha", 3);
         t.insert("hello", 4);
         t.insert("hey", 5);
         t.insert("hey", 5);
         t.insert("heya", 75);
+        t.insert("where", 7005);
+        t.insert("which", 735);
         t.insert("goodbye", 8);
 
-        System.out.println(t.topMatch("hey"));
+        System.out.println(t.topMatch("heya"));
+        System.out.println(t.topMatch("which"));
+        System.out.println(t.getWeight("which"));
+        System.out.println(t.getWeight("goodbye"));
+        System.out.println(t.getWeight("where"));
+        System.out.println(t.getWeight("hey"));
+        System.out.println(t.getWeight("heya"));
+        System.out.println(t.getWeight("hello"));
         //t.printTree();
         /*
         System.out.println(t.find("haha"));

@@ -1,4 +1,6 @@
+import java.util.LinkedList;
 /**
+ * 
  * Implements autocomplete on prefixes for a given dictionary of terms and weights.
  */
 public class Autocomplete {
@@ -53,9 +55,9 @@ public class Autocomplete {
      * @return Iterable in descending weight order of the matches
      */
     public Iterable<String> spellCheck(String word, int dist, int k) {
-        //LinkedList<String> results = new LinkedList<String>();  
+        LinkedList<String> results = new LinkedList<String>();  
         /* YOUR CODE HERE; LEAVE BLANK IF NOT PURSUING BONUS */
-        return null;
+        return results;
     }
     /**
      * Test client. Reads the data from the file, 
@@ -76,12 +78,19 @@ public class Autocomplete {
 
         Autocomplete autocomplete = new Autocomplete(terms, weights);
 
+//        System.out.println(autocomplete.topMatch("auto"));
         // process queries from standard input
         int k = Integer.parseInt(args[1]);
         while (StdIn.hasNextLine()) {
             String prefix = StdIn.readLine();
-            for (String term : autocomplete.topMatches(prefix, k))
-                StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
+
+            String term = autocomplete.topMatch(prefix);
+            //better api to return string and weight at the same time to avoid
+            //traversing twice. implement if it doesn't pass the timing tests
+            StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
+
+            //for (String term : autocomplete.topMatches(prefix, 1))
+             //   StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
         }
     }
 }

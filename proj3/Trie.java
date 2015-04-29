@@ -66,11 +66,11 @@ public class Trie {
             }
         }
     }
-/*
     public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("hello");
         t.insert("hey");
+        t.insert("goodbye");
         t.insert("goodbye");
         t.printWithAlphabet("abcdefghijklmnopqrstuvwxyz" 
                            ,new StringBuilder());
@@ -81,5 +81,4 @@ public class Trie {
         System.out.println(t.find("heyy", false));
         System.out.println(t.find("hell", true));   
     }
-    */
 }
