@@ -1,4 +1,7 @@
-//use tenary trie much better
+/**
+ * Weighted Trie. Better than other implementation for weights.
+ * @author Ganesh Rapolu
+ */
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
@@ -12,10 +15,21 @@ public class WeightedTrie {
     WeightedTrie down;
     WeightedTrie right;
 
+    /**
+     * Initializes trie
+     * @param s string
+     * @param w weight
+     */
     public WeightedTrie(String s, double w) {
         this(s, w, 0);
     }
 
+    /**
+     * Initializes trie
+     * @param s string
+     * @param w weight
+     * @param i index
+     */
     public WeightedTrie(String s, double w, int i) {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
@@ -27,22 +41,33 @@ public class WeightedTrie {
         down = null;
         str = null;
         c = s.charAt(i);
-        if (s.length() - 1 != i){
-            down =new WeightedTrie(s, w, i+1);
+        if (s.length() - 1 != i) {
+            down =new WeightedTrie(s, w, i + 1);
         } else {
             weight = w;
             str = s;
         }
     }
 
-    public void insert(String s, double w){
+    /**
+     * Inserts word
+     * @param s string
+     * @param w weight
+     */
+    public void insert(String s, double w) {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
         insert(s, w, 0);
     }
 
-    public void insert(String s, double w, int i){
+    /**
+     * Inserts word
+     * @param s string
+     * @param w weight
+     * @param i index
+     */
+    public void insert(String s, double w, int i) {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
@@ -62,9 +87,9 @@ public class WeightedTrie {
             }
         } else if (c == s.charAt(i)) {
             if (down == null) {
-                down = new WeightedTrie(s, w, i+1);
+                down = new WeightedTrie(s, w, i + 1);
             } else {
-                down.insert(s, w, i+1);
+                down.insert(s, w, i + 1);
             }
         } else {
             if (left == null) {
@@ -75,11 +100,16 @@ public class WeightedTrie {
         }
     }
 
-    public boolean find(String s){
+    /**
+     * Finds word
+     * @param s string
+     * @return true if s in trie
+     */
+    public boolean find(String s) {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
-        if (s.length() == 1 && c == s.charAt(0)){
+        if (s.length() == 1 && c == s.charAt(0)) {
             return !Double.isNaN(weight);
         }
         if (c < s.charAt(0)) {
@@ -100,12 +130,17 @@ public class WeightedTrie {
         }
     }
 
+    /**
+     * Finds topMatch
+     * @param prefix prefix to search
+     * @return top matching word
+     */
     public String topMatch(String prefix) {
         if (prefix == null) {
             throw new IllegalArgumentException();
         }
 
-        if (prefix.equals("")){ 
+        if (prefix.equals("")) { 
             if (weight == maxWeight) {
                 return str;
             } else {
@@ -146,6 +181,12 @@ public class WeightedTrie {
         }
     }
 
+    /**
+     * Finds topMatches
+     * @param prefix prefix to search
+     * @param k number of matches
+     * @return top matching words
+     */
     public Iterable<String> topMatches(String prefix, int k) {
         if (prefix == null || k <= 0) {
             throw new IllegalArgumentException();
@@ -157,7 +198,8 @@ public class WeightedTrie {
             pqueue.put(maxWeight, this);
         }
         topMatches(prefix, pqueue, map, k);
-        //todo: figure out how to get in descending order of weight
+
+        //gets them in the right order
         LinkedList<String> list = new LinkedList();
         for (String s : map.values()){
             list.addFirst(s);
@@ -165,12 +207,21 @@ public class WeightedTrie {
         return list;
     }
 
+    /**
+     * Finds topMatches
+     * @param prefix prefix to search
+     * @param pqueue priority queue
+     * @param map map to store results
+     * @param k number of matches
+     * @return top matching words
+     */
     public void topMatches(String prefix, TreeMap<Double, WeightedTrie> pqueue, TreeMap<Double, String> map, int k) {
+        //weights are not unique!!!!!
         if (prefix.equals("")) {
-            //are these the right conditions?
+
             while (pqueue.size() != 0) {
                 WeightedTrie trie = pqueue.pollLastEntry().getValue();
-                //NEVER REFERENCE CURRENT VARIABLES; ONLY THROUGH trie!!!
+
                 if (!Double.isNaN(trie.weight)) {
                     if (map.size() < k) {
                         map.put(trie.weight, trie.str);
@@ -228,7 +279,12 @@ public class WeightedTrie {
     }
 
 
-    public double getWeight(String s){
+    /**
+     * Gets weight of string 
+     * @param s string to get weight of
+     * @return weight
+     */
+    public double getWeight(String s) {
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
         }
@@ -256,7 +312,10 @@ public class WeightedTrie {
     }
 
 
-    public void printTree(){
+    /**
+     * Prints tree
+     */
+    public void printTree() {
         System.out.println(c);
         if (str != null) {
             System.out.println(str);
@@ -275,6 +334,10 @@ public class WeightedTrie {
         }
     }
 
+    /**
+     * Test client
+     * @param args command line args
+     */
     public static void main(String[] args) {
         WeightedTrie t = new WeightedTrie("haha", 3);
         t.insert("hello", 4);
@@ -284,7 +347,7 @@ public class WeightedTrie {
         t.insert("where", 7005);
         t.insert("which", 735);
         t.insert("goodbye", 8);
-//        t.printTree();
+        //        t.printTree();
         System.out.println(t.topMatch("hey"));
         System.out.println(t.topMatches("he", 2));
         System.out.println(t.topMatches("", 200));

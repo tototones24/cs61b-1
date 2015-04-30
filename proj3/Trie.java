@@ -9,12 +9,21 @@ public class Trie {
     boolean exists;
     HashMap<Character, Trie> map;
 
+    /**
+     * Initializes required data structures.
+     */
     public Trie() {
         exists = false;
         map = new HashMap();
     }
 
 
+    /**
+     * Finds word
+     * @param s string to search for
+     * @param isFullWord is a full word
+     * @return true if word is in trie
+     */
     public boolean find(String s, boolean isFullWord) {
         if (s == null) { 
             return false;
@@ -28,7 +37,11 @@ public class Trie {
         return map.get(s.charAt(0)).find(s.substring(1), isFullWord);
     }
 
-    public void insert(String s){
+    /**
+     * Inserts word
+     * @param s string to insert
+     */
+    public void insert(String s) {
         if (s == null || s.equals("")) {
             throw(new IllegalArgumentException());
         }
@@ -50,13 +63,18 @@ public class Trie {
     }
 
 
-    public void printWithAlphabet(String alphabet, StringBuilder builder){
+    /**
+     * Prints trie in order specified by alphabet
+     * @param alphabet alphabet order
+     * @param builder buffer
+     */
+    public void printWithAlphabet(String alphabet, StringBuilder builder) {
         if (exists){
             System.out.println(builder);
         }
-        for (int i=0; i<alphabet.length(); i++) { 
+        for (int i = 0; i < alphabet.length(); i++) { 
             char c = alphabet.charAt(i);
-            if (map.containsKey(c)){
+            if (map.containsKey(c)) {
                 builder.append(c);
                 map.get(c).printWithAlphabet(alphabet, builder);
                 builder.deleteCharAt(builder.length() - 1);
@@ -64,6 +82,10 @@ public class Trie {
         }
     }
 
+    /**
+     * Test client.
+     * @param args command line args
+     */
     public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("hello");
@@ -71,7 +93,7 @@ public class Trie {
         t.insert("goodbye");
         t.insert("goodbye");
         t.printWithAlphabet("abcdefghijklmnopqrstuvwxyz" 
-                           ,new StringBuilder());
+                ,new StringBuilder());
         System.out.println(t.find("hell", false));
         System.out.println(t.find("hello", true));
         System.out.println(t.find("good", false));

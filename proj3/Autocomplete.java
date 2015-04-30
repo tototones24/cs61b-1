@@ -2,6 +2,7 @@ import java.util.LinkedList;
 /**
  * 
  * Implements autocomplete on prefixes for a given dictionary of terms and weights.
+ * @author Ganesh Rapolu
  */
 public class Autocomplete {
     /**
@@ -19,8 +20,8 @@ public class Autocomplete {
 
     /**
      * Find the weight of a given term. If it is not in the dictionary, return 0.0
-     * @param term
-     * @return
+     * @param term Term to search for
+     * @return Weight of term
      */
     public double weightOf(String term) {
         return trie.getWeight(term);
@@ -38,9 +39,9 @@ public class Autocomplete {
     /**
      * Returns the top k matching terms (in descending order of weight) as an iterable.
      * If there are less than k matches, return all the matching terms.
-     * @param prefix
-     * @param k
-     * @return
+     * @param prefix Prefix to search for
+     * @param k number of items
+     * @return top k matches
      */
     public Iterable<String> topMatches(String prefix, int k) {
         return trie.topMatches(prefix, k);
@@ -77,6 +78,9 @@ public class Autocomplete {
             }
             in.readChar();                  // scan past the tab
             terms[i] = in.readLine();       // read the next term
+        }
+        if (in.hasNextLine()) {
+            throw new IllegalArgumentException();
         }
 
         Autocomplete autocomplete = new Autocomplete(terms, weights);
