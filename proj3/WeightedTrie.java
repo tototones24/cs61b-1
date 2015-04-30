@@ -32,6 +32,7 @@ public class WeightedTrie {
             str = s;
         }
     }
+
     public void insert(String s, double w){
         if (s == null || s.equals("")) {
             throw new IllegalArgumentException();
@@ -98,52 +99,49 @@ public class WeightedTrie {
     }
 
     public String topMatch(String prefix) {
-        if (prefix == null || prefix.equals("")) {
+        if (prefix == null) {
             throw new IllegalArgumentException();
         }
-        return topMatch(prefix, new StringBuffer());
-    }
 
-    public String topMatch(String prefix, StringBuffer buf) {
+
         if (prefix.equals("")){ 
             if (weight == maxWeight) {
-                buf.append(c);
-                return buf.toString();
-            }
-            if (left != null && left.maxWeight == maxWeight) {
-                return left.topMatch(prefix, buf);
-            }
-            if (down != null && down.maxWeight == maxWeight) {
-                buf.append(c);
-                return down.topMatch(prefix, buf);
-            }
-            if (right != null && right.maxWeight == maxWeight) {
-                return right.topMatch(prefix, buf);
+                return str;
+            } else {
+                if (left != null && left.maxWeight == maxWeight) {
+                    return left.topMatch(prefix);
+                }
+                if (down != null && down.maxWeight == maxWeight) {
+                    return down.topMatch(prefix);
+                }
+                if (right != null && right.maxWeight == maxWeight) {
+                    return right.topMatch(prefix);
+                }
             }
         }
 
+        //case where prefix has length 1 and you are at a leaf node
         if (prefix.length() == 1 && c == prefix.charAt(0)) {
             if (weight == maxWeight) {
-                buf.append(c);
-                return buf.toString();
+                return str;
             }
         }
+
         if (c < prefix.charAt(0)) {
             if (right == null) {
                 return null;
             }
-            return right.topMatch(prefix, buf);
+            return right.topMatch(prefix);
         } else if (c == prefix.charAt(0)) {
             if (down == null) {
                 return null;
             }
-            buf.append(c);
-            return down.topMatch(prefix.substring(1), buf);
+            return down.topMatch(prefix.substring(1));
         } else {
             if (left == null) {
                 return null;
             }
-            return left.topMatch(prefix, buf);
+            return left.topMatch(prefix);
         }
     }
 
