@@ -108,11 +108,14 @@ public class WeightedTrie {
             }
         }
 
-        if (prefix.length() == 1 && c == prefix.charAt(0)) {
+        if (prefix.length() == 1 && c != prefix.charAt(0)) {
+            return null;
+            /*
             if (left == null && down == null && right == null) {
                 buf.append(c);
                 return buf.toString();
             }
+            */
         }
         if (c < prefix.charAt(0)) {
             if (right == null) {
@@ -138,11 +141,35 @@ public class WeightedTrie {
             throw new IllegalArgumentException();
         }
 
-        return topMatches(prefix,new StringBuffer(prefix), new ArrayList(), k);
+        ArrayList arr = new ArrayList();
+        topMatches(prefix,new StringBuffer(prefix), arr, k);
+        return arr;
     }
 
-    public Iterable<String> topMatches(String prefix, StringBuffer buf, ArrayList arr, int k) {
-        return null;
+    public void topMatches(String prefix, StringBuffer buf, ArrayList arr, int k) {
+        if (prefix.equals("")) {
+            //todo
+        }
+        if (prefix.length() == 1 && prefix.charAt(0) != c) {
+            return;
+        }
+        if (c < prefix.charAt(0)) {
+            if (right == null) {
+                return;
+            }
+            right.topMatches(prefix, buf, arr, k);
+        } else if (c == prefix.charAt(0)) {
+            if (down == null) {
+                return;
+            }
+            buf.append(c);
+            down.topMatches(prefix.substring(1), buf, arr, k);
+        } else {
+            if (left == null) {
+                return;
+            }
+            left.topMatches(prefix, buf, arr, k);
+        }
     }
 
 
