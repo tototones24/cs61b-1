@@ -3,7 +3,7 @@ import java.util.HashMap;
  * Prefix-Trie. Supports linear time find() and insert(). 
  * Should support determining whether a word is a full word in the 
  * Trie or a prefix.
- * @author 
+ * @author Ganesh Rapolu
  */
 public class Trie {
     boolean exists;
@@ -42,9 +42,7 @@ public class Trie {
             Trie t = new Trie();
             map.put(s.charAt(0), t);
             if (s.length() == 1) {
-                //conflicts with regular operations!!!!
                 t.exists = true;
-                //exists = true;
             } else {
                 t.insert(s.substring(1));
             }
@@ -53,7 +51,6 @@ public class Trie {
 
 
     public void printWithAlphabet(String alphabet, StringBuilder builder){
-        //conflicts with regular operations!!!!
         if (exists){
             System.out.println(builder);
         }
@@ -66,6 +63,7 @@ public class Trie {
             }
         }
     }
+
     public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("hello");

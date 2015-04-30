@@ -1,5 +1,7 @@
 //use tenary trie much better
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.TreeMap;
 public class WeightedTrie {
     //max wieght >= 0 amongst sub tries 
     char c;
@@ -103,7 +105,6 @@ public class WeightedTrie {
             throw new IllegalArgumentException();
         }
 
-
         if (prefix.equals("")){ 
             if (weight == maxWeight) {
                 return str;
@@ -146,38 +147,77 @@ public class WeightedTrie {
     }
 
     public Iterable<String> topMatches(String prefix, int k) {
-        if (prefix == null || prefix.equals("")) {
+        if (prefix == null || prefix.equals("") || k <= 0) {
             throw new IllegalArgumentException();
         }
 
-        ArrayList arr = new ArrayList();
-        topMatches(prefix,new StringBuffer(prefix), arr, k);
-        return arr;
+        TreeMap<Double, String> map = new TreeMap();
+        TreeMap<Double, WeightedTrie> pqueue = new TreeMap();
+        topMatches(prefix, pqueue, map, k);
+        //todo: figure out how to get in descending order of weight
+        LinkedList<String> list = new LinkedList();
+        for (String s : map.values()){
+            list.addFirst(s);
+        }
+        return list;
     }
 
-    public void topMatches(String prefix, StringBuffer buf, ArrayList arr, int k) {
+    public void topMatches(String prefix, TreeMap<Double, WeightedTrie> pqueue, TreeMap<Double, String> map, int k) {
         if (prefix.equals("")) {
-            //todo
-        }
-        if (prefix.length() == 1 && prefix.charAt(0) != c) {
+            //are these the right conditions?
+            while (pqueue.size() != 0) {
+                WeightedTrie trie = pqueue.pollLastEntry().getValue();
+                //NEVER REFERENCE CURRENT VARIABLES; ONLY THROUGH trie!!!
+                if (!Double.isNaN(trie.weight)) {
+                    if (map.size() < k) {
+                        map.put(trie.weight, trie.str);
+                    } else if (map.size() == k && map.firstKey() < trie.weight) {
+                        map.pollFirstEntry();
+                        map.put(trie.weight, trie.str);
+                    }
+                } else {
+                    if (trie.left != null) {
+                        pqueue.put(trie.left.maxWeight, trie.left);
+                    }
+                    if (trie.down != null) {
+                        pqueue.put(trie.down.maxWeight, trie.down);
+                    }
+                    if (trie.right != null) {
+                        pqueue.put(trie.right.maxWeight, trie.right);
+                    }
+                    if (pqueue.size() == 0) {
+                        break;
+                    }
+                    if (map.size() == k && map.firstKey() > pqueue.lastKey()) {
+                        break;
+                    }
+                }
+            }
             return;
         }
+
+        if (prefix.length() == 1 && c == prefix.charAt(0)) {
+            if (down != null) {
+                pqueue.put(down.maxWeight, down);
+                topMatches(prefix.substring(1), pqueue, map, k);
+            }
+        }
+
         if (c < prefix.charAt(0)) {
             if (right == null) {
                 return;
             }
-            right.topMatches(prefix, buf, arr, k);
+            right.topMatches(prefix, pqueue, map, k);
         } else if (c == prefix.charAt(0)) {
             if (down == null) {
                 return;
             }
-            buf.append(c);
-            down.topMatches(prefix.substring(1), buf, arr, k);
+            down.topMatches(prefix.substring(1), pqueue, map, k);
         } else {
             if (left == null) {
                 return;
             }
-            left.topMatches(prefix, buf, arr, k);
+            left.topMatches(prefix, pqueue, map, k);
         }
     }
 
@@ -240,6 +280,8 @@ public class WeightedTrie {
         t.insert("goodbye", 8);
 //        t.printTree();
         System.out.println(t.topMatch("hey"));
+        System.out.println(t.topMatches("he", 2));
+
         System.out.println(t.topMatch("heya"));
         System.out.println(t.topMatch("which"));
         System.out.println(t.getWeight("which"));

@@ -43,7 +43,7 @@ public class Autocomplete {
      * @return
      */
     public Iterable<String> topMatches(String prefix, int k) {
-        return null;
+        return trie.topMatches(prefix, k);
     }
 
     /**
@@ -84,13 +84,12 @@ public class Autocomplete {
         while (StdIn.hasNextLine()) {
             String prefix = StdIn.readLine();
 
-            String term = autocomplete.topMatch(prefix);
             //better api to return string and weight at the same time to avoid
             //traversing twice. implement if it doesn't pass the timing tests
-            StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
 
-            //for (String term : autocomplete.topMatches(prefix, 1))
-             //   StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
+
+            for (String term : autocomplete.topMatches(prefix, k))
+                StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
         }
     }
 }
