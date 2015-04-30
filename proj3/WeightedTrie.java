@@ -153,6 +153,9 @@ public class WeightedTrie {
 
         TreeMap<Double, String> map = new TreeMap();
         TreeMap<Double, WeightedTrie> pqueue = new TreeMap();
+        if (prefix.equals("")) {
+            pqueue.put(maxWeight, this);
+        }
         topMatches(prefix, pqueue, map, k);
         //todo: figure out how to get in descending order of weight
         LinkedList<String> list = new LinkedList();
@@ -200,6 +203,9 @@ public class WeightedTrie {
             if (down != null) {
                 pqueue.put(down.maxWeight, down);
                 topMatches(prefix.substring(1), pqueue, map, k);
+            } else if(!Double.isNaN(weight)) {
+                map.put(weight, str);
+                return;
             }
         }
 
@@ -281,6 +287,8 @@ public class WeightedTrie {
 //        t.printTree();
         System.out.println(t.topMatch("hey"));
         System.out.println(t.topMatches("he", 2));
+        System.out.println(t.topMatches("", 200));
+        System.out.println(t.topMatches("which", 200));
 
         System.out.println(t.topMatch("heya"));
         System.out.println(t.topMatch("which"));
