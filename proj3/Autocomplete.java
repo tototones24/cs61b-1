@@ -72,6 +72,9 @@ public class Autocomplete {
         double[] weights = new double[N];
         for (int i = 0; i < N; i++) {
             weights[i] = in.readDouble();   // read the next weight
+            if (weights[i] < 0) {
+                throw new IllegalArgumentException();
+            }
             in.readChar();                  // scan past the tab
             terms[i] = in.readLine();       // read the next term
         }

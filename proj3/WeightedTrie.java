@@ -147,7 +147,7 @@ public class WeightedTrie {
     }
 
     public Iterable<String> topMatches(String prefix, int k) {
-        if (prefix == null || prefix.equals("") || k <= 0) {
+        if (prefix == null || k <= 0) {
             throw new IllegalArgumentException();
         }
 
@@ -175,22 +175,22 @@ public class WeightedTrie {
                         map.pollFirstEntry();
                         map.put(trie.weight, trie.str);
                     }
-                } else {
-                    if (trie.left != null) {
-                        pqueue.put(trie.left.maxWeight, trie.left);
-                    }
-                    if (trie.down != null) {
-                        pqueue.put(trie.down.maxWeight, trie.down);
-                    }
-                    if (trie.right != null) {
-                        pqueue.put(trie.right.maxWeight, trie.right);
-                    }
-                    if (pqueue.size() == 0) {
-                        break;
-                    }
-                    if (map.size() == k && map.firstKey() > pqueue.lastKey()) {
-                        break;
-                    }
+                } 
+
+                if (trie.left != null) {
+                    pqueue.put(trie.left.maxWeight, trie.left);
+                }
+                if (trie.down != null) {
+                    pqueue.put(trie.down.maxWeight, trie.down);
+                }
+                if (trie.right != null) {
+                    pqueue.put(trie.right.maxWeight, trie.right);
+                }
+                if (pqueue.size() == 0) {
+                    break;
+                }
+                if (map.size() == k && map.firstKey() > pqueue.lastKey()) {
+                    break;
                 }
             }
             return;
