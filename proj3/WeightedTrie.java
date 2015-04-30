@@ -200,13 +200,13 @@ public class WeightedTrie {
         }
 
         if (prefix.length() == 1 && c == prefix.charAt(0)) {
+            if (!Double.isNaN(weight)) {
+                map.put(weight, str);
+            }
             if (down != null) {
                 pqueue.put(down.maxWeight, down);
                 topMatches(prefix.substring(1), pqueue, map, k);
-            } else if(!Double.isNaN(weight)) {
-                map.put(weight, str);
-                return;
-            }
+            } 
         }
 
         if (c < prefix.charAt(0)) {
