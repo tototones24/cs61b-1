@@ -74,35 +74,34 @@ public class Autocomplete {
         String[] terms = new String[N];
         double[] weights = new double[N];
         HashSet<String> seen = new HashSet();
-        for (int i = 0; i < N; i++) {
-            weights[i] = in.readDouble();   // read the next weight
-            if (weights[i] < 0) {
-                throw new IllegalArgumentException();
+        try {
+            for (int i = 0; i < N; i++) {
+                weights[i] = in.readDouble();   // read the next weight
+                if (weights[i] < 0) {
+                    throw new IllegalArgumentException();
+                }
+                in.readChar();                  // scan past the tab
+                if (in.hasNextLine()) {
+                    throw new IllegalArgumentException();
+                }
+                terms[i] = in.readLine();       // read the next term
+                if (!seen.add(terms[i])) {
+                    throw new IllegalArgumentException();
+                }
             }
-            in.readChar();                  // scan past the tab
             if (in.hasNextLine()) {
                 throw new IllegalArgumentException();
             }
-            terms[i] = in.readLine();       // read the next term
-            if (!seen.add(terms[i])) {
-                throw new IllegalArgumentException();
-            }
-        }
-        if (in.hasNextLine()) {
+        } catch (Exception e) {
             throw new IllegalArgumentException();
         }
 
         Autocomplete autocomplete = new Autocomplete(terms, weights);
 
-        //        System.out.println(autocomplete.topMatch("auto"));
         // process queries from standard input
         int k = Integer.parseInt(args[1]);
         while (StdIn.hasNextLine()) {
             String prefix = StdIn.readLine();
-
-            //better api to return string and weight at the same time to avoid
-            //traversing twice. implement if it doesn't pass the timing tests
-
 
             for (String term : autocomplete.topMatches(prefix, k)) {
                 StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
