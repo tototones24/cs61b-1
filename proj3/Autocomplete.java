@@ -13,9 +13,19 @@ public class Autocomplete {
      * @param weights Array of weights.
      */
     public Autocomplete(String[] terms, double[] weights) {
+        if (terms.length != weights.length) {
+            throw new IllegalArgumentException();
+        }
         trie = new WeightedTrie(terms[0], weights[0]);
-        for (int i = 1; i < terms.length; i++) {
+        HashSet<String> seen = new HashSet();
+        for (int i = 0; i < terms.length; i++) {
+            if (weights[i] < 0) {
+                throw new IllegalArgumentException();
+            }
             trie.insert(terms[i], weights[i]);
+            if (!seen.add(terms[i])) {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
@@ -73,27 +83,10 @@ public class Autocomplete {
         int N = in.readInt();
         String[] terms = new String[N];
         double[] weights = new double[N];
-        HashSet<String> seen = new HashSet();
-        try {
-            for (int i = 0; i < N; i++) {
-                weights[i] = in.readDouble();   // read the next weight
-                if (weights[i] < 0) {
-                    throw new IllegalArgumentException();
-                }
-                in.readChar();                  // scan past the tab
-                if (in.hasNextLine()) {
-                    throw new IllegalArgumentException();
-                }
-                terms[i] = in.readLine();       // read the next term
-                if (!seen.add(terms[i])) {
-                    throw new IllegalArgumentException();
-                }
-            }
-            if (in.hasNextLine()) {
-                throw new IllegalArgumentException();
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
+        for (int i = 0; i < N; i++) {
+            weights[i] = in.readDouble();   // read the next weight
+            in.readChar();                  // scan past the tab
+            terms[i] = in.readLine();       // read the next term
         }
 
         Autocomplete autocomplete = new Autocomplete(terms, weights);
