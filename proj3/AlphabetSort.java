@@ -18,14 +18,14 @@ public class AlphabetSort {
         }
         String alphabet = in.nextLine();
         HashSet<Character> s = new HashSet();
-        for (int i = 0; i < alphabet.length(); i++){
+        for (int i = 0; i < alphabet.length(); i++) {
             s.add(alphabet.charAt(i));
         }
         if (!in.hasNextLine() || alphabet.length() != s.size()) {
             throw new IllegalArgumentException();
         }
         Trie t = new Trie();
-        while(in.hasNextLine()) {
+        while (in.hasNextLine()) {
             t.insert(in.nextLine());
         }
         t.printWithAlphabet(alphabet, new StringBuilder());

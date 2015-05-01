@@ -69,9 +69,6 @@ public class Trie {
      * @param builder buffer
      */
     public void printWithAlphabet(String alphabet, StringBuilder builder) {
-        if (exists){
-            System.out.println(builder);
-        }
         for (int i = 0; i < alphabet.length(); i++) { 
             char c = alphabet.charAt(i);
             if (map.containsKey(c)) {
@@ -79,6 +76,9 @@ public class Trie {
                 map.get(c).printWithAlphabet(alphabet, builder);
                 builder.deleteCharAt(builder.length() - 1);
             }
+        }
+        if (exists) {
+            System.out.println(builder);
         }
     }
 
@@ -92,8 +92,7 @@ public class Trie {
         t.insert("hey");
         t.insert("goodbye");
         t.insert("goodbye");
-        t.printWithAlphabet("abcdefghijklmnopqrstuvwxyz" 
-                ,new StringBuilder());
+        t.printWithAlphabet("abcdefghijklmnopqrstuvwxyz" ,new StringBuilder());
         System.out.println(t.find("hell", false));
         System.out.println(t.find("hello", true));
         System.out.println(t.find("good", false));

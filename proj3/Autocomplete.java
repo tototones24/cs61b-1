@@ -1,19 +1,20 @@
 import java.util.LinkedList;
+import java.util.HashSet;
 /**
  * 
  * Implements autocomplete on prefixes for a given dictionary of terms and weights.
  * @author Ganesh Rapolu
  */
 public class Autocomplete {
+    WeightedTrie trie;
     /**
      * Initializes required data structures from parallel arrays.
      * @param terms Array of terms.
      * @param weights Array of weights.
      */
-    WeightedTrie trie;
     public Autocomplete(String[] terms, double[] weights) {
         trie = new WeightedTrie(terms[0], weights[0]);
-        for (int i=1; i<terms.length; i++){
+        for (int i = 1; i < terms.length; i++) {
             trie.insert(terms[i], weights[i]);
         }
     }
@@ -62,7 +63,8 @@ public class Autocomplete {
     }
     /**
      * Test client. Reads the data from the file, 
-     * then repeatedly reads autocomplete queries from standard input and prints out the top k matching terms.
+     * then repeatedly reads autocomplete queries from standard input and prints out the 
+     * top k matching terms.
      * @param args takes the name of an input file and an integer k as command-line arguments
      */
     public static void main(String[] args) {
@@ -71,6 +73,7 @@ public class Autocomplete {
         int N = in.readInt();
         String[] terms = new String[N];
         double[] weights = new double[N];
+        HashSet<String> seen = new HashSet();
         for (int i = 0; i < N; i++) {
             weights[i] = in.readDouble();   // read the next weight
             if (weights[i] < 0) {
@@ -78,6 +81,9 @@ public class Autocomplete {
             }
             in.readChar();                  // scan past the tab
             terms[i] = in.readLine();       // read the next term
+            if (!seen.add(terms[i])){
+                throw new IllegalArgumentException();
+            }
         }
         if (in.hasNextLine()) {
             throw new IllegalArgumentException();
@@ -85,7 +91,7 @@ public class Autocomplete {
 
         Autocomplete autocomplete = new Autocomplete(terms, weights);
 
-//        System.out.println(autocomplete.topMatch("auto"));
+        //        System.out.println(autocomplete.topMatch("auto"));
         // process queries from standard input
         int k = Integer.parseInt(args[1]);
         while (StdIn.hasNextLine()) {
@@ -95,8 +101,9 @@ public class Autocomplete {
             //traversing twice. implement if it doesn't pass the timing tests
 
 
-            for (String term : autocomplete.topMatches(prefix, k))
+            for (String term : autocomplete.topMatches(prefix, k)) {
                 StdOut.printf("%14.1f  %s\n", autocomplete.weightOf(term), term);
+            }
         }
     }
 }
