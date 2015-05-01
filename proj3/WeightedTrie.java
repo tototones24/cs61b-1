@@ -4,7 +4,9 @@
  */
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Stack;
 import java.util.TreeMap;
+import java.util.Map;
 public class WeightedTrie {
     //max wieght >= 0 amongst sub tries 
     char c;
@@ -192,19 +194,44 @@ public class WeightedTrie {
             throw new IllegalArgumentException();
         }
 
-        TreeMap<Double, String> map = new TreeMap();
-        TreeMap<Double, WeightedTrie> pqueue = new TreeMap();
+        TreeMap<Double, Stack<String>> map = new TreeMap();
+        TreeMap<Double, Stack<WeightedTrie>> pqueue = new TreeMap();
         if (prefix.equals("")) {
-            pqueue.put(maxWeight, this);
+            Stack<WeightedTrie> s = new Stack();
+            s.push(this);
+            pqueue.put(maxWeight, s);
         }
         topMatches(prefix, pqueue, map, k);
 
         //gets them in the right order
         LinkedList<String> list = new LinkedList();
-        for (String s : map.values()){
-            list.addFirst(s);
+        int i = 0;
+        for (Stack<String> stack : map.values()) {
+            if (i == k) {
+                break;
+            }
+            for (String s : stack) {
+                list.addFirst(s);
+                i++;
+                if (i == k) {
+                    break;
+                }
+            }
         }
         return list;
+    }
+
+    /**
+     * Gets size
+     * @param tree tree to find size of
+     * @return actual size of tree
+     */
+    public int mySize(TreeMap<Double, Stack<String>> tree) {
+        int size = 0;
+        for (Stack s : tree.values()) {
+            size += s.size();
+        }
+        return size;
     }
 
     /**
@@ -215,35 +242,55 @@ public class WeightedTrie {
      * @param k number of matches
      * @return top matching words
      */
-    public void topMatches(String prefix, TreeMap<Double, WeightedTrie> pqueue, TreeMap<Double, String> map, int k) {
-        //weights are not unique!!!!!
+    public void topMatches(String prefix, TreeMap<Double, Stack<WeightedTrie>> pqueue,
+                            TreeMap<Double, Stack<String>> map, int k) {
         if (prefix.equals("")) {
 
             while (pqueue.size() != 0) {
-                WeightedTrie trie = pqueue.pollLastEntry().getValue();
+                //takes care of multiple nodes having the same weighted max
+                Stack<WeightedTrie> trieStack = pqueue.pollLastEntry().getValue();
+                WeightedTrie trie = trieStack.pop();
+                if (!trieStack.empty()) {
+                    pqueue.put(trie.maxWeight, trieStack);
+                }
 
                 if (!Double.isNaN(trie.weight)) {
-                    if (map.size() < k) {
-                        map.put(trie.weight, trie.str);
-                    } else if (map.size() == k && map.firstKey() < trie.weight) {
-                        map.pollFirstEntry();
-                        map.put(trie.weight, trie.str);
+                    while (mySize(map) >= k && map.firstKey() < trie.weight) {
+                        Map.Entry<Double, Stack<String>> entry = map.pollFirstEntry();
+                        entry.getValue().pop();
+                        if (!entry.getValue().empty()){
+                            map.put(entry.getKey(), entry.getValue());
+                        }
+                    }
+
+                    if(mySize(map) < k || map.firstKey() < trie.weight) {
+                        if (map.containsKey(trie.weight)) {
+                            map.get(trie.weight).push(trie.str);
+                        } else {
+                            Stack<String> s = new Stack();
+                            s.push(trie.str);
+                            map.put(trie.weight, s);
+                        }
                     }
                 } 
 
-                if (trie.left != null) {
-                    pqueue.put(trie.left.maxWeight, trie.left);
+                WeightedTrie[] w = { trie.left, trie.down, trie.right };
+                for (WeightedTrie t : w) {
+                    if (t != null) {
+                        if (pqueue.containsKey(t.maxWeight)) {
+                            pqueue.get(t.maxWeight).push(t);
+                        } else {
+                            Stack<WeightedTrie> s = new Stack();
+                            s.push(t);
+                            pqueue.put(t.maxWeight, s);
+                        }
+                    }
                 }
-                if (trie.down != null) {
-                    pqueue.put(trie.down.maxWeight, trie.down);
-                }
-                if (trie.right != null) {
-                    pqueue.put(trie.right.maxWeight, trie.right);
-                }
+
                 if (pqueue.size() == 0) {
                     break;
                 }
-                if (map.size() == k && map.firstKey() > pqueue.lastKey()) {
+                if (mySize(map) >= k && map.firstKey() > pqueue.lastKey()) {
                     break;
                 }
             }
@@ -252,10 +299,14 @@ public class WeightedTrie {
 
         if (prefix.length() == 1 && c == prefix.charAt(0)) {
             if (!Double.isNaN(weight)) {
-                map.put(weight, str);
+                Stack<String> s = new Stack();
+                s.push(str);
+                map.put(weight, s);
             }
             if (down != null) {
-                pqueue.put(down.maxWeight, down);
+                Stack<WeightedTrie> s = new Stack();
+                s.push(down);
+                pqueue.put(down.maxWeight, s);
                 topMatches(prefix.substring(1), pqueue, map, k);
             } 
         }
