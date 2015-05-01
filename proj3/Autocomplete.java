@@ -80,6 +80,9 @@ public class Autocomplete {
                 throw new IllegalArgumentException();
             }
             in.readChar();                  // scan past the tab
+            if (in.hasNextLine()) {
+                throw new IllegalArgumentException();
+            }
             terms[i] = in.readLine();       // read the next term
             if (!seen.add(terms[i])) {
                 throw new IllegalArgumentException();
