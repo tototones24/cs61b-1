@@ -240,8 +240,6 @@ public final class Sort {
 
     /** Returns true if x < y, false otherwise. */
     private static boolean less(int x, int y) {
-        /** YOUR CODE HERE! */
-        
         return x < y;
     }
 
@@ -252,14 +250,9 @@ public final class Sort {
      *  @param index2 the index of the second int to be swapped.
      **/
     private static void exch(int[] a, int index1, int index2) {
-        /** YOUR CODE HERE! */
-
         int tmp = a[index1];
         a[index1] = a[index2];
         a[index2] = tmp;
-
-        /** YOUR CODE HERE! */
-
     }
 
 }
