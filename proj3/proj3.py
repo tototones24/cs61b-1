@@ -4,6 +4,7 @@ c = conn.cursor();
 c.execute("create table data (string text primary key, weight real)");
 
 with open(sys.argv[1]) as f:
+    #skip first line
     f.readline()
     content = f.readlines()
 
