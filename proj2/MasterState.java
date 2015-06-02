@@ -246,10 +246,4 @@ public class MasterState implements Serializable {
 
         }
     }
-
-    public void rebase(String branchName) {
-    }
-
-    public void advancedRebase(String branchName) {
-    }
 }
